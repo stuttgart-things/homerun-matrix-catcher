@@ -1,0 +1,32 @@
+{
+    "events": [
+        {
+            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "Info": "/images/***-alpine:2024-08-05",
+            "Severity": "info",
+            "Author": "machineShop",
+            "Timestamp": "08-05-2024 05:58:49",
+            "System": "kaniko",
+            "Tags": "[kaniko ghWorkflow]"
+        },
+        {
+            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "Info": "/images/***-alpine:2024-08-05",
+            "Severity": "error",
+            "Author": "machineShop",
+            "Timestamp": "08-05-2024 05:58:49",
+            "System": "gitlab",
+            "Tags": "[kaniko ghWorkflow]"
+        },
+        {
+            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "Info": "/images/***-alpine:2024-08-05",
+            "Severity": "info",
+            "Author": "machineShop",
+            "Timestamp": "08-05-2024 05:58:49",
+            "System": "gitlab",
+            "Tags": "[kaniko ghWorkflow]"
+        }
+    ]
+}
+
