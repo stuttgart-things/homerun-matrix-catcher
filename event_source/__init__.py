@@ -1,3 +1,4 @@
 from event_source.redis_stream_source import RedisStreamsSource
 from event_source.stdin_source import StdinSource
 from event_source.jsonfile_source import JsonFileSource
+from event_source.generate_source import RandomEventSource

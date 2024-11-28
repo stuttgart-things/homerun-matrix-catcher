@@ -52,6 +52,7 @@ def generate_random_event():
     random_system = random.choice(systems)
     if "scale" in random_system:
         messages = [{"Message": "WEIGHT: 1000"}]
+    
     # Construct the random event message
     return {
         "Title": random.choice(titles),

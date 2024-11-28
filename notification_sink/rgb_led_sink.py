@@ -86,6 +86,10 @@ class RGBSink():
             event_severity = event.get('Severity').lower()
             event_timestamp = event.get('Timestamp').lower()
 
+            print(f"Checking rule: {rule_name}")
+            print(f"Event system: {event_system}, Event severity: {event_severity}")
+            print(f"Rule systems: {systems}, Rule severity: {severitys}")
+
             args = {}  # Create a new args dictionary for each rule
 
             # Check if the event matches the rule's systems and severity
@@ -101,7 +105,7 @@ class RGBSink():
                     args['image'] = rule.get('image')
 
                 event_args.append({"Mode": kind, "Severity": severitys, "Systems": systems, "Timestamp": event_timestamp, "Args": args})
-
+        print(f"Generated event arguments: {event_args}")
         return event_args
 
     async def build_event_list(self):
@@ -109,6 +113,7 @@ class RGBSink():
         #severity_dict, systems_dict, argument_dict = self.get_rules(self.rules)
         while True:
             event_json = await self.queue.get()
+            print(f"Processing event: {event_json}")##########
             event_args = self.get_arguments(self.rules, event_json["event"])
             self.pending_events.append(event_args)
             print("\npending events")
@@ -120,6 +125,7 @@ class RGBSink():
             if self.pending_events and self.event_args==None:
                 #time_difference, log, time_valid = evaluate_event_timing(self.event_args, 3)
                 #if time_valid:
+                print(f"Running event: {self.event_args}")
                 self.event_args = self.pending_events.pop(0)
                 await self.display_task()
             else:
@@ -179,6 +185,7 @@ class RGBSink():
             return
 
     async def consume(self, data : dict):
+        print(f"Consuming event: {data}")#########
         await self.queue.put(data)
 
     def get_speed(self, speed):
