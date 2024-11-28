@@ -1,3 +1,4 @@
+import datetime
 from typing import Dict
 from rgbmatrix import RGBMatrix, RGBMatrixOptions,graphics
 import time
@@ -10,6 +11,7 @@ from PIL import Image
 import requests
 import numpy as np
 from io import BytesIO
+from helper_functions.eventtime_comparison.compare_time import evaluate_event_timing
 
 class RGBSink():
     def __init__(self):
@@ -82,6 +84,7 @@ class RGBSink():
             systems = rule.get('systems')
             event_system = event.get('System').lower()
             event_severity = event.get('Severity').lower()
+            event_timestamp = event.get('Timestamp').lower()
 
             args = {}  # Create a new args dictionary for each rule
 
@@ -96,7 +99,8 @@ class RGBSink():
                 # Add other arguments from the rule
                 elif kind in ["gif", "image"]:
                     args['image'] = rule.get('image')
-                event_args.append({"Mode": kind, "Severity": severitys, "Systems": systems, "Args": args})
+
+                event_args.append({"Mode": kind, "Severity": severitys, "Systems": systems, "Timestamp": event_timestamp, "Args": args})
 
         return event_args
 
@@ -114,6 +118,8 @@ class RGBSink():
     async def run_event_list(self):
         while True:
             if self.pending_events and self.event_args==None:
+                #time_difference, log, time_valid = evaluate_event_timing(self.event_args, 3)
+                #if time_valid:
                 self.event_args = self.pending_events.pop(0)
                 await self.display_task()
             else:

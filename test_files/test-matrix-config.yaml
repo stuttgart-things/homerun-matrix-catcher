@@ -28,7 +28,7 @@ matrixConfig:
   logoGeneric:
     kind: image
     systems:
-      - default
+      - all
     severity:
       - info
       - success
