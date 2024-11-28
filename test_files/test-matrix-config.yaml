@@ -1,30 +1,46 @@
 ---
 matrixConfig:
+  github_error:
+    kind: gif
+    systems:
+      - github
+    severity:
+      - failed
+    image: sunset.gif
+    duration: 5
+  gitlab_error:
+    kind: gif
+    systems:
+      - gitlab
+    severity:
+      - failed
+    image: car.gif
+    duration: 5
+  git_success:
+    kind: gif
+    systems:
+      - gitlab
+      - github
+    severity:
+      - success
+    image: nyan.gif
+    duration: 5
   logoGeneric:
     kind: image
+    systems:
+      - default
     severity:
       - info
       - success
     image: sthings.png
     duration: 5
-  errorGif:
-    kind: gif
-    systems:
-      - gitlab
-      - generic
-      - github
-    severity:
-      - error
-    image: https://media1.tenor.com/m/u8jwYAiT_DgAAAAC/boom-bomb.gif
-    duration: 30
-  text:
+  scale_text:
     kind: static
     systems:
-      - all # all should be a special variable wich means all (systems in this case)
+      - scale
     severity:
       - info
     text: |
-      {{ Message | replace('WEIGHT: ','') }}g # jinja templating
+      {{ Message | replace('WEIGHT: ','') }}g
     speed: 5
     font: myfont.bdf
-

@@ -22,7 +22,7 @@ class JsonFileSource(EventSource):
         events = await self.get_events(event_file)
         for event in events:
             await self.write_event(event)
-            await asyncio.sleep(45)
+            #await asyncio.sleep(10)
         await asyncio.sleep(200)
 
     async def stop(self):

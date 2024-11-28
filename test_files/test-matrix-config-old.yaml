@@ -1,0 +1,38 @@
+---
+matrixConfig:
+  gitAlerts:
+    kind: image
+    systems:
+      - gitlab
+      - github
+    severity:
+      - error
+    image: error-git.png
+    duration: 5
+  logoGeneric:
+    kind: image
+    severity:
+      - info
+      - success
+    image: sthings.png
+    duration: 5
+  errorGif:
+    kind: gif
+    systems:
+      - gitlab
+      - generic
+      - github
+    severity:
+      - error
+    image: https://media1.tenor.com/m/u8jwYAiT_DgAAAAC/boom-bomb.gif
+    duration: 30
+  text:
+    kind: static
+    systems:
+      - all # all should be a special variable wich means all (systems in this case)
+    severity:
+      - info
+    text: |
+      {{ Message | replace('WEIGHT: ','') }}g # jinja templating
+    speed: 5
+    font: myfont.bdf
