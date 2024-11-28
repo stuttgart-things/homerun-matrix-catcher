@@ -18,7 +18,7 @@ def generate_random_event():
     ]
     severities = ["info", "warning", "error", "success"]
     authors = ["Monitoring System", "System Admin", "Automated Alert", "DevOps Team"]
-    systems = ["github", "gitlab", "Network Monitoring"]
+    systems = ["github", "gitlab", "Network Monitoring", "scale"]
     tags_options = [
         "server, monitoring, cpu",
         "disk, alert, storage",
@@ -49,18 +49,20 @@ def generate_random_event():
     current_time = datetime.datetime.now()
     random_time_offset = random.randint(1, 8)  # Random seconds
     random_timestamp = (current_time - datetime.timedelta(seconds=random_time_offset)).isoformat()
-
+    random_system = random.choice(systems)
+    if "scale" in random_system:
+        messages = [{"Message": "WEIGHT: 1000"}]
     # Construct the random event message
     return {
-        "title": random.choice(titles),
-        "message": random.choice(messages),
-        "severity": random.choice(severities),
-        "author": random.choice(authors),
-        "timestamp": random_timestamp,
-        "system": random.choice(systems),
-        "tags": random.choice(tags_options),
-        "assignee_address": random.choice(assignee_addresses),
-        "assignee_name": random.choice(assignee_names),
-        "artifacts": random.choice(artifact_notes),
-        "url": random.choice(urls)
+        "Title": random.choice(titles),
+        "Message": random.choice(messages),
+        "Severity": random.choice(severities),
+        "Author": random.choice(authors),
+        "Timestamp": random_timestamp,
+        "System": random_system,
+        "Tags": random.choice(tags_options),
+        "Assignee_address": random.choice(assignee_addresses),
+        "Assignee_name": random.choice(assignee_names),
+        "Artifacts": random.choice(artifact_notes),
+        "Url": random.choice(urls)
     }

@@ -3,29 +3,47 @@
         {
             "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
             "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "info",
+            "Severity": "failed",
             "Author": "machineShop",
-            "Timestamp": "08-05-2024 05:58:49",
-            "System": "kaniko",
+            "Timestamp": "2024-11-28 13:54:13.050000",
+            "System": "github",
             "Tags": "[kaniko ghWorkflow]"
         },
         {
             "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
             "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "error",
+            "Severity": "failed",
             "Author": "machineShop",
-            "Timestamp": "08-05-2024 05:58:49",
+            "Timestamp": "2024-11-28 13:54:13.150000",
             "System": "gitlab",
             "Tags": "[kaniko ghWorkflow]"
         },
         {
             "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
             "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "info",
+            "Severity": "success",
             "Author": "machineShop",
-            "Timestamp": "08-05-2024 05:58:49",
+            "Timestamp": "2024-11-28 13:54:13.250000",
             "System": "gitlab",
             "Tags": "[kaniko ghWorkflow]"
+        },
+        {
+            "Title": "ansible success",
+            "Info": "/images/***-alpine:2024-08-05",
+            "Severity": "info",
+            "Author": "machineShop",
+            "Timestamp": "2024-11-28 13:54:13.400000",
+            "System": "default",
+            "Tags": "[ansible ghWorkflow]"
+        },
+        {
+            "Title": "scale event",
+            "Severity": "info",
+            "Author": "scale",
+            "Timestamp": "2024-11-28 13:54:13.500000",
+            "System": "scale",
+            "Tags": "[scale]",
+            "Message": "WEIGHT: 1000"
         }
     ]
 }

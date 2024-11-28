@@ -1,3 +1,6 @@
+Run Python rgb-led-sink:
+sudo python -E demo_redis.py --profile test_files/test-matrix-config.yaml
+
 Modes:
 	- image
 		- file: Name of file within visual_aid/ or url.

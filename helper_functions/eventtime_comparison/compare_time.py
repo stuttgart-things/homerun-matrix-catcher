@@ -14,9 +14,7 @@ def evaluate_event_timing(event, maxAge):
     """
     # Parse the event's timestamp
     event_time = datetime.datetime.fromisoformat(event["Timestamp"])
-    print(event_time)
     current_time = datetime.datetime.now()
-    print(current_time)
 
     # Calculate the time difference in seconds
     time_difference = (current_time - event_time).total_seconds()
