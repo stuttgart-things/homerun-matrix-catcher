@@ -4,12 +4,3 @@ __pycache__
 
 visual_aid/*
 !visual_aid/sthings.png
-
-fonts/*
-!fonts/quattrocento*
-!fonts/README*
-!fonts/7x13.bdf
-!fonts/10x20.bdf
-!fonts/spleen-32x64.bdf
-
-

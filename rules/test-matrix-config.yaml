@@ -36,6 +36,14 @@ matrixConfig:
       - SUCCESS
     image: sthings.png
     duration: 5
+  ansible_error:
+    kind: gif
+    systems:
+      - ansible
+    severity:
+      - ERROR
+    image: 49c6d8004be45c83ce4b4f94278aa28f.gif
+    duration: 5
   scale_text:
     kind: static
     systems:

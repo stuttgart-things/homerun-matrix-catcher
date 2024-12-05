@@ -11,7 +11,9 @@ from PIL import Image
 import requests
 import numpy as np
 from io import BytesIO
-from helper_functions.eventtime_comparison.compare_time import evaluate_event_timing
+from helper_functions.arguments import get_arguments, get_speed, get_color
+from helper_functions.rules import get_rules
+from helper_functions.compare_time import evaluate_event_timing
 
 class RGBSink():
     def __init__(self):
@@ -36,7 +38,7 @@ class RGBSink():
         self.rules = None
 
     async def start(self, rules_file):
-        self.rules = self.get_rules(rules_file)
+        self.rules = get_rules(rules_file)
         self.task = asyncio.create_task(self.run())
 
     async def stop(self):
@@ -44,77 +46,13 @@ class RGBSink():
             self.task.Cancel()
             self.task = None
 
-    def get_rules(self, rules_yaml):
-        with open(rules_yaml, 'r') as file:
-            configuration = yaml.safe_load(file)
-        configuration = configuration["matrixConfig"]
-
-        rules = {}
-        for key, value in configuration.items():
-            rules[key] = {
-                'kind': value.get('kind'),
-                'severity': value.get('severity'),
-                'systems': value.get('systems')
-            }
-            # Conditionally add 'text' if it is not None
-            if value.get('text') is not None:
-                rules[key]['text'] = value.get('text')
-                rules[key]['font'] = value.get('font')
-            # Conditionally add 'image' if it is not None
-            if value.get('image') is not None:
-                rules[key]['image'] = value.get('image')
-            # Conditionally add 'duration' if it is not None
-            if value.get('duration') is not None:
-                rules[key]['duration'] = value.get('duration')
-
-        print("Rules: ", rules)
-        return rules
-
-    def get_arguments(self, rules, event):
-        event_args = []
-        event_args.clear()
-        print("/////////////////////////////////////")
-        print(event)
-        print("/////////////////////////////////////")
-        for rule_name, rule in rules.items():
-            if event_args:
-                break
-            kind = rule.get('kind')
-            severitys = rule.get('severity')
-            systems = rule.get('systems')
-            event_system = event.get('system')
-            event_severity = event.get('severity')
-            event_timestamp = event.get('timestamp')
-
-            print(f"Checking rule: {rule_name}")
-            print(f"Event system: {event_system}, Event severity: {event_severity}")
-            print(f"Rule systems: {systems}, Rule severity: {severitys}")
-
-            args = {}  # Create a new args dictionary for each rule
-
-            # Check if the event matches the rule's systems and severity
-            if event_system  in systems and event_severity in severitys:
-                # If the rule has a text key, process it
-                if kind in ["static", "text", "ticker"]:
-                    print_text = rule.get('text')
-                    print_text = Template(print_text).render(**event)
-                    args["text"] = print_text
-                    args['font'] = rule.get('font')
-                # Add other arguments from the rule
-                elif kind in ["gif", "image"]:
-                    args['image'] = rule.get('image')
-
-                event_args.append({"mode": kind, "severity": severitys, "systems": systems, "timestamp": event_timestamp, "args": args})
-        print(f"Generated event arguments: {event_args}")
-        return event_args
-
     async def build_event_list(self):
         print("in build")
         #severity_dict, systems_dict, argument_dict = self.get_rules(self.rules)
         while True:
             event_json = await self.queue.get()
             print(f"Processing event: {event_json}")##########
-            event_args = self.get_arguments(self.rules, event_json["event"])
+            event_args = get_arguments(self.rules, event_json["event"])
             if event_args:
                 self.pending_events += event_args
             print("\npending events")
@@ -128,8 +66,10 @@ class RGBSink():
                 print("Popping event")
                 event_args = self.pending_events.pop(0)
                 print(f"Popped event: {event_args}")
-                time_difference, log, event_expired = evaluate_event_timing(event_args, 15)
-                if not event_expired:
+                time_difference, log, event_expired = evaluate_event_timing(event_args, 120)
+                print(log)
+                print(f"The time difference is: {time_difference}")
+                if event_expired:
                     print(f"Running event: {event_args}")
                     await self.display_task(event_args)
                 else:
@@ -196,20 +136,20 @@ class RGBSink():
         print(f"Consuming event: {data}")#########
         await self.queue.put(data)
 
-    def get_speed(self, speed):
-        sleep_dict = {"5": 0.01, "4": 0.03, "3": 0.05, "2":0.1, "1":0.2}
-        return sleep_dict[str(speed)]
-
-    def get_color(self, color):
-        color = color.replace("(","").replace(")","").replace(" ","")
-        color = color.split(",")
-        return color 
+#    def get_speed(self, speed):
+#        sleep_dict = {"5": 0.01, "4": 0.03, "3": 0.05, "2":0.1, "1":0.2}
+#        return sleep_dict[str(speed)]
+#
+#    def get_color(self, color):
+#        color = color.replace("(","").replace(")","").replace(" ","")
+#        color = color.split(",")
+#        return color 
 
     async def flow_text(self, args, ticker = True): #, loops=5, font_sytle="./spleen-32x64.bdf"):
         text = args.get("text")
         font_style = args.get("font", "quattrocento48.bdf")
-        color = self.get_color(args.get("color","255,192,203"))
-        speed = self.get_speed(args.get("speed","5"))
+        color = get_color(args.get("color","255,192,203"))
+        speed = get_speed(args.get("speed","5"))
         loops =  int(args.get("loops", 1))
         show_time = int(args.get("duration", 5))
 
@@ -261,8 +201,8 @@ class RGBSink():
         print("SHOWING STATIC TEXT")
         text = args.get("text")
         font_style = args.get("font", "quattrocento48.bdf")
-        color = self.get_color(args.get("color","255,192,203"))
-        speed = self.get_speed(args.get("speed","5"))
+        color = get_color(args.get("color","255,192,203"))
+        speed = get_speed(args.get("speed","5"))
         show_time = int(args.get("duration", 5))
 
         print(f"Animating '{text}'\n")
@@ -365,7 +305,7 @@ class RGBSink():
         show_time = int(args.get("duration", 5))
         if show_time == 0:
             self.flag_infinity = True
-        speed = self.get_speed(args.get("speed","2"))
+        speed = get_speed(args.get("speed","2"))
         size = args.get("size", "full")
         if size != "full":
             size = size.split("x")

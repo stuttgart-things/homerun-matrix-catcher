@@ -20,8 +20,8 @@ class RandomEventSource(EventSource):
         events = await self.get_events()
         for event in events:
             await self.write_event(event)
-            #await asyncio.sleep(12)
-        await asyncio.sleep(200)
+            await asyncio.sleep(5)
+        await asyncio.sleep(120)
 
     async def stop(self):
         """Stop the stdin event source."""
