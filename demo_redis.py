@@ -51,6 +51,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script that displays events in matrix")
     parser.add_argument("--profile", required=True, help="Yaml Rule file")
     #parser.add_argument("--events", required=True, help="File with json events")
+    #parser.add_argument("--host", required=True, help="Redis host")
+    #parser.add_argument("--port", required=True, help="Redis port")
+    #parser.add_argument("--password", required=True, help="Redis password")
     args = parser.parse_args()
 
     profile_yaml = args.profile

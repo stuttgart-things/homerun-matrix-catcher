@@ -16,9 +16,9 @@ def generate_random_event():
         "Latency exceeds 200ms",
         "Service successfully restarted"
     ]
-    severities = ["info", "warning", "error", "success"]
+    severities = ["INFO", "WARNING", "FAILED", "SUCCESS"]
     authors = ["Monitoring System", "System Admin", "Automated Alert", "DevOps Team"]
-    systems = ["github", "gitlab", "Network Monitoring", "scale"]
+    systems = ["github", "gitlab", "ansible", "scale"]
     tags_options = [
         "server, monitoring, cpu",
         "disk, alert, storage",
@@ -46,24 +46,24 @@ def generate_random_event():
     ]
 
     # Generate a random timestamp 1-15 seconds in the past
-    current_time = datetime.datetime.now()
+    current_time = datetime.datetime.now().timestamp()
     random_time_offset = random.randint(1, 8)  # Random seconds
-    random_timestamp = (current_time - datetime.timedelta(seconds=random_time_offset)).isoformat()
+    random_timestamp = current_time - random_time_offset
     random_system = random.choice(systems)
     if "scale" in random_system:
-        messages = [{"Message": "WEIGHT: 1000"}]
+        messages = ["WEIGHT: 1000"]
     
     # Construct the random event message
     return {
-        "Title": random.choice(titles),
-        "Message": random.choice(messages),
-        "Severity": random.choice(severities),
-        "Author": random.choice(authors),
-        "Timestamp": random_timestamp,
-        "System": random_system,
-        "Tags": random.choice(tags_options),
-        "Assignee_address": random.choice(assignee_addresses),
-        "Assignee_name": random.choice(assignee_names),
-        "Artifacts": random.choice(artifact_notes),
-        "Url": random.choice(urls)
+        "title": random.choice(titles),
+        "message": random.choice(messages),
+        "severity": random.choice(severities),
+        "author": random.choice(authors),
+        "timestamp": random_timestamp,
+        "system": random_system,
+        "tags": random.choice(tags_options),
+        "assignee_address": random.choice(assignee_addresses),
+        "assignee_name": random.choice(assignee_names),
+        "artifacts": random.choice(artifact_notes),
+        "url": random.choice(urls)
     }

@@ -15,14 +15,14 @@ class RedisStreamsSource(EventSource):
         self.consumers: List[Callable[[str, dict], None]] = []
 
         
-        self.redis_host = '192.168.1.121'
+        self.redis_host = '192.168.1.120'
         self.redis_port = 6379
-        self.redis_password = 'Atlan7is2025'
+        self.redis_password = 'Atlan7is2024'
 
         self.pool = redis.ConnectionPool(host=self.redis_host, port=self.redis_port, password=self.redis_password, decode_responses=True)
         self.r = redis.Redis(connection_pool=self.pool)
         
-        self.stream_name = 'scaletest'
+        self.stream_name = 'homerun'
         self.group_name = 'homerun'
         self.consumer_name = 'python-test-consumer'
 

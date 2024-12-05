@@ -13,11 +13,14 @@ def evaluate_event_timing(event, maxAge):
         bool: True if the event is valid (you should fire it), False if it's too old.
     """
     # Parse the event's timestamp
-    event_time = datetime.datetime.fromisoformat(event["Timestamp"])
+    maxAge = datetime.timedelta(seconds=maxAge)
+    event_time = datetime.datetime.fromtimestamp(event["timestamp"])
+    print(event_time)
     current_time = datetime.datetime.now()
+    print(current_time)
 
     # Calculate the time difference in seconds
-    time_difference = (current_time - event_time).total_seconds()
+    time_difference = (current_time - event_time)
 
     # Evaluate the event timing and return the result
     if time_difference > maxAge:

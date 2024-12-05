@@ -82,9 +82,9 @@ class RGBSink():
             kind = rule.get('kind')
             severitys = rule.get('severity')
             systems = rule.get('systems')
-            event_system = event.get('System').lower()
-            event_severity = event.get('Severity').lower()
-            event_timestamp = event.get('Timestamp').lower()
+            event_system = event.get('system')
+            event_severity = event.get('severity')
+            event_timestamp = event.get('timestamp')
 
             print(f"Checking rule: {rule_name}")
             print(f"Event system: {event_system}, Event severity: {event_severity}")
@@ -104,7 +104,7 @@ class RGBSink():
                 elif kind in ["gif", "image"]:
                     args['image'] = rule.get('image')
 
-                event_args.append({"Mode": kind, "Severity": severitys, "Systems": systems, "Timestamp": event_timestamp, "Args": args})
+                event_args.append({"mode": kind, "severity": severitys, "systems": systems, "timestamp": event_timestamp, "args": args})
         print(f"Generated event arguments: {event_args}")
         return event_args
 
@@ -115,49 +115,57 @@ class RGBSink():
             event_json = await self.queue.get()
             print(f"Processing event: {event_json}")##########
             event_args = self.get_arguments(self.rules, event_json["event"])
-            self.pending_events.append(event_args)
+            if event_args:
+                self.pending_events += event_args
             print("\npending events")
             print(self.pending_events)
             print("\n\n")
 
     async def run_event_list(self):
         while True:
-            if self.pending_events and self.event_args==None:
-                #time_difference, log, time_valid = evaluate_event_timing(self.event_args, 3)
-                #if time_valid:
-                print(f"Running event: {self.event_args}")
-                self.event_args = self.pending_events.pop(0)
-                await self.display_task()
-            else:
-                await asyncio.sleep(1)
-
-    async def display_task(self):
-        for event in self.event_args:
-            print("Running event: " + str(event))
-
-            if event["Mode"].strip().lower()=="static":
-                self.animation_task = asyncio.create_task(self.static_text(event.get("Args",{}),ticker=False))
-
-            elif event["Mode"].strip().lower()=="text":
-                self.animation_task = asyncio.create_task(self.flow_text(event.get("Args",{}),ticker=False))
-
-            elif event["Mode"].strip().lower()=="ticker":
-                self.animation_task = asyncio.create_task(self.flow_text(event.get("Args",{}),ticker=True))
-
-            elif event["Mode"].strip().lower()=="image":
-                self.animation_task = asyncio.create_task(self.display_image(event.get("Args",{})))
-
-            elif event["Mode"].strip().lower()=="gif":
-                self.animation_task = asyncio.create_task(self.display_gif(event.get("Args",{})))
-
-
-            if self.animation_task != None:
-                if self.flag_infinity:
-                    self.animation_task.cancel()
-                    self.flag_infinity = False
+            print(f"evaluating pending events, {len(self.pending_events)} left")
+            if self.pending_events:
+                print("Popping event")
+                event_args = self.pending_events.pop(0)
+                print(f"Popped event: {event_args}")
+                time_difference, log, event_expired = evaluate_event_timing(event_args, 15)
+                if not event_expired:
+                    print(f"Running event: {event_args}")
+                    await self.display_task(event_args)
                 else:
-                    result = await self.animation_task
-            #if selfs.animation_task != None and self.flag_infinity:
+                    print("Events expired not showing")
+
+            else:
+                print("No events found, sleeping")
+                await asyncio.sleep(1)
+                
+
+    async def display_task(self, event):
+        print("Running event: " + str(event))
+
+        if event["mode"].strip().lower()=="static":
+            self.animation_task = asyncio.create_task(self.static_text(event.get("args",{}),ticker=False))
+
+        elif event["mode"].strip().lower()=="text":
+            self.animation_task = asyncio.create_task(self.flow_text(event.get("args",{}),ticker=False))
+
+        elif event["mode"].strip().lower()=="ticker":
+            self.animation_task = asyncio.create_task(self.flow_text(event.get("args",{}),ticker=True))
+
+        elif event["mode"].strip().lower()=="image":
+            self.animation_task = asyncio.create_task(self.display_image(event.get("args",{})))
+
+        elif event["mode"].strip().lower()=="gif":
+            self.animation_task = asyncio.create_task(self.display_gif(event.get("args",{})))
+
+
+        if self.animation_task != None:
+            if self.flag_infinity:
+                self.animation_task.cancel()
+                self.flag_infinity = False
+            else:
+                result = await self.animation_task
+        #if selfs.animation_task != None and self.flag_infinity:
 
         self.queue.task_done()
             
