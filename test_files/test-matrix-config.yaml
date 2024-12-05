@@ -5,7 +5,8 @@ matrixConfig:
     systems:
       - github
     severity:
-      - failed
+      - WARNING
+      - ERROR
     image: sunset.gif
     duration: 5
   gitlab_error:
@@ -13,7 +14,8 @@ matrixConfig:
     systems:
       - gitlab
     severity:
-      - failed
+      - WARNING
+      - ERROR
     image: car.gif
     duration: 5
   git_success:
@@ -22,16 +24,16 @@ matrixConfig:
       - gitlab
       - github
     severity:
-      - success
+      - SUCCESS
     image: nyan.gif
     duration: 5
-  logoGeneric:
+  ansible_success:
     kind: image
     systems:
-      - all
+      - ansible
     severity:
-      - info
-      - success
+      - INFO
+      - SUCCESS
     image: sthings.png
     duration: 5
   scale_text:
@@ -39,8 +41,10 @@ matrixConfig:
     systems:
       - scale
     severity:
-      - info
+      - WARNING
+      - INFO
     text: |
-      {{ Message | replace('WEIGHT: ','') }}g
+      {{ message | replace('WEIGHT: ','') }}g
     speed: 5
     font: myfont.bdf
+

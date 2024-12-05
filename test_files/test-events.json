@@ -1,50 +1,49 @@
 {
     "events": [
         {
-            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
-            "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "failed",
-            "Author": "machineShop",
-            "Timestamp": "2024-11-28 13:54:13.050000",
-            "System": "github",
-            "Tags": "[kaniko ghWorkflow]"
+            "title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "info": "/images/***-alpine:2024-08-05",
+            "severity": "ERROR",
+            "author": "machineShop",
+            "timestamp": 1732884677,
+            "system": "github",
+            "tags": "[kaniko ghWorkflow]"
         },
         {
-            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
-            "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "failed",
-            "Author": "machineShop",
-            "Timestamp": "2024-11-28 13:54:13.150000",
-            "System": "gitlab",
-            "Tags": "[kaniko ghWorkflow]"
+            "title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "info": "/images/***-alpine:2024-08-05",
+            "severity": "ERROR",
+            "author": "machineShop",
+            "timestamp": 1732884677,
+            "system": "gitlab",
+            "tags": "[kaniko ghWorkflow]"
         },
         {
-            "Title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
-            "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "success",
-            "Author": "machineShop",
-            "Timestamp": "2024-11-28 13:54:13.250000",
-            "System": "gitlab",
-            "Tags": "[kaniko ghWorkflow]"
+            "title": "image was build w/ kaniko on github workflows /images/***-alpine:2024-08-05",
+            "info": "/images/***-alpine:2024-08-05",
+            "severity": "SUCCESS",
+            "author": "machineShop",
+            "timestamp": 1732884677,
+            "system": "gitlab",
+            "tags": "[kaniko ghWorkflow]"
         },
         {
-            "Title": "ansible success",
-            "Info": "/images/***-alpine:2024-08-05",
-            "Severity": "info",
-            "Author": "machineShop",
-            "Timestamp": "2024-11-28 13:54:13.400000",
-            "System": "default",
-            "Tags": "[ansible ghWorkflow]"
+            "title": "ansible success",
+            "info": "/images/***-alpine:2024-08-05",
+            "severity": "INFO",
+            "author": "machineShop",
+            "timestamp": 1732884677,
+            "system": "ansible",
+            "tags": "[ansible ghWorkflow]"
         },
         {
-            "Title": "scale event",
-            "Severity": "info",
-            "Author": "scale",
-            "Timestamp": "2024-11-28 13:54:13.500000",
-            "System": "scale",
-            "Tags": "[scale]",
-            "Message": "WEIGHT: 1000"
+            "title": "scale event",
+            "severity": "INFO",
+            "author": "scale",
+            "timestamp": 1732884677,
+            "system": "scale",
+            "tags": "[scale]",
+            "message": "WEIGHT: 1000"
         }
     ]
 }
-

@@ -17,4 +17,5 @@ class EventSource(ABC):
     async def _notify_consumers(self, event: Dict[str, str]):
         """Notify all registered consumers about a new event."""
         for consumer in self.consumers:
+            print(f"Notifying consumer: {consumer} with event: {event}")
             await consumer(event)
