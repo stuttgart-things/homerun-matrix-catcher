@@ -9,7 +9,11 @@ async def build_event_list(queue, rules, pending_events):
         event_json = await queue.get()
         print(f"Processing event: {event_json}")
         event_args = get_arguments(rules, event_json["event"])
+        print("*******************************************************************************************")
+        print(event_args)
+        print("*******************************************************************************************")
         if event_args:
+            print("INSIDE HERE")
             pending_events += event_args
         print("\npending events")
         print(pending_events)

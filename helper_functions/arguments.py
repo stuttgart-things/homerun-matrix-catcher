@@ -1,4 +1,4 @@
-from string import Template
+from jinja2 import Template
 
 
 def get_arguments(rules, event):
@@ -24,7 +24,7 @@ def get_arguments(rules, event):
         args = {}  # Create a new args dictionary for each rule
 
         # Check if the event matches the rule's systems and severity
-        if event_system  in systems and event_severity in severitys:
+        if event_system in systems and event_severity in severitys:
             # If the rule has a text key, process it
             if kind in ["static", "text", "ticker"]:
                 print_text = rule.get('text')
@@ -34,7 +34,6 @@ def get_arguments(rules, event):
             # Add other arguments from the rule
             elif kind in ["gif", "image"]:
                 args['image'] = rule.get('image')
-
             event_args.append({"mode": kind, "severity": severitys, "systems": systems, "timestamp": event_timestamp, "args": args})
     print(f"Generated event arguments: {event_args}")
     return event_args

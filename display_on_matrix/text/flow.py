@@ -1,5 +1,3 @@
-
-
 import asyncio
 from helper_functions.arguments import get_color, get_speed
 from rgbmatrix import graphics

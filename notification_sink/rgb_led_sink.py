@@ -13,7 +13,11 @@ import numpy as np
 from io import BytesIO
 from display_on_matrix.display_logic import display_task
 from display_on_matrix.text.flow import flow_text
-from helper_functions.arguments import get_arguments, get_speed, get_color
+from display_on_matrix.text.timed import timed_text
+from display_on_matrix.text.ticker import ticker_text
+from display_on_matrix.text.static import static_text
+from display_on_matrix.image_gif.image import display_image
+from helper_functions.arguments import get_speed, get_color
 from helper_functions.event_list import build_event_list, run_event_list
 from helper_functions.rules import get_rules
 
@@ -82,128 +86,61 @@ class RGBSink():
     # Unused/untested for now 05.12.24
     async def flow_text(self, args, ticker=True):
         await flow_text(self, args, ticker)
-    
-#    async def ticker_text(self, offscreen_canvas, font, pos_x, pos_y, textcolor, text, loop, loops, speed):
-#        try:
-#            while loops > 0:
-#                offscreen_canvas.Clear()
-#                length = graphics.DrawText(offscreen_canvas, font, pos_x, pos_y, textcolor, text)
-#                pos_x -= 1
-#
-#                if (pos_x + length < 0):
-#                    loops -= 1
-#                    pos_x = offscreen_canvas.width
-#
-#                offscreen_canvas = await loop.run_in_executor(None, self.matrix.SwapOnVSync, offscreen_canvas)
-#                # adapt to modify speed
-#                await asyncio.sleep(speed)
-#
-#        except asyncio.CancelledError:
-#            print("cancelado")
-#            return "error"
 
-    async def static_text(self, args, ticker = True): #, loops=5, font_sytle="./spleen-32x64.bdf"):
-        print("SHOWING STATIC TEXT")
-        text = args.get("text")
-        font_style = args.get("font", "quattrocento48.bdf")
-        color = get_color(args.get("color","255,192,203"))
-        speed = get_speed(args.get("speed","5"))
-        show_time = int(args.get("duration", 5))
+    # Unused/untested for now 06.12.24
+    async def ticker_text(self, offscreen_canvas, font, pos_x, pos_y, textcolor, text, loop, loops, speed):
+        await ticker_text(self, offscreen_canvas, font, pos_x, pos_y, textcolor, text, loop, loops, speed)
 
-        print(f"Animating '{text}'\n")
-        loop = asyncio.get_running_loop()
-
-        offscreen_canvas = self.matrix.CreateFrameCanvas()
-        
-        font = graphics.Font()
-        font.LoadFont("fonts/" + font_style)
-        print(f"Baseline: {font.baseline}, Canvas-height: {offscreen_canvas.height}, Canvas-width : {offscreen_canvas.width}")
-        if font.baseline >= offscreen_canvas.height:
-            # centers the text with offset of 4
-            pos_y = int((offscreen_canvas.height - font.baseline) / 2 + font.baseline + 4)
-            # pos_y = int(font.baseline - (offscreen_canvas.height/2 - font.baseline/2))
-        else:
-            # centers the text with offset of 4
-            pos_y = int((offscreen_canvas.height - font.baseline) / 2 + font.baseline - 4)
-            # pos_y = int(font.baseline + (offscreen_canvas.height/2 - font.baseline/2))
-        
-        textcolor = graphics.Color(int(color[0]),int(color[1]),int(color[2]))
-
-        # Manually calculate the width of the text
-        # text_width = sum(font.CharacterWidth(ord(char)) for char in text)
-        text_width = graphics.DrawText(offscreen_canvas, font, 0, pos_y, textcolor, text)
-        # Calculate the starting x position to center the text
-        pos_x = ((offscreen_canvas.width - (text_width - 2)) / 2)
-
-        offscreen_canvas.Clear()
-        graphics.DrawText(offscreen_canvas, font, pos_x, pos_y, textcolor, text)
-        offscreen_canvas = await loop.run_in_executor(None, self.matrix.SwapOnVSync, offscreen_canvas)
-
-        await asyncio.sleep(10)
-        return
-
+    # Unused/untested for now 06.12.24
     async def timed_text(self, offscreen_canvas, font, pos_x, pos_y, textcolor, text, loop, show_time, speed):
-        try:
-            time_start = time.time()
-            while True :  #To interrupt after time is done or to finish run?
-                done_flag = False
-                offscreen_canvas.Clear()
-                length = graphics.DrawText(offscreen_canvas, font, pos_x, pos_y, textcolor, text)
-                pos_x -= 1
+        await timed_text(self, offscreen_canvas, font, pos_x, pos_y, textcolor, text, loop, show_time, speed)
 
-                if (pos_x + length < 0):
-                    pos_x = offscreen_canvas.width
-                    if time.time() > time_start + show_time: break
-
-                offscreen_canvas = await loop.run_in_executor(None, self.matrix.SwapOnVSync, offscreen_canvas)
-                
-                # adapt to modify speed
-                await asyncio.sleep(speed)
-        except asyncio.CancelledError:
-            return "error"
-        return
+    async def static_text(self, args, ticker=True):
+        await static_text(self, args, ticker)
 
     async def display_image(self, args):
-        file_name = args.get("image")
-        show_time = int(args.get("duration", 5))
-        if show_time == 0:
-            self.flag_infinity = True
-        size = args.get("size", "full")
-        if size != "full":
-            size = size.split("x")
-            image_width = int(size[0])
-            image_height = int(size[1])
-        else: 
-            image_width = self.matrix.width
-            image_height = self.matrix.height
-        offset_x, offset_y= 0, 0
+        await display_image(self, args)
 
-        print(f"Animating '{file_name}'\n")
-        ## Check if URL
-        if "http" in file_name:
-            image = Image.open(requests.get(file_name, stream=True).raw) 
-        else:
-            image = Image.open("visual_aid/" + file_name)
-
-        image.thumbnail((image_width, image_height), Image.ANTIALIAS)
-        if image.width != self.matrix.width: offset_x = (self.matrix.width - image.width)/2
-        if image.height != self.matrix.height: offset_y = (self.matrix.height - image.height)/2
-
-        try:
-            self.matrix.SetImage(image.convert('RGB'), offset_x, offset_y)
-            #if show_time != 0:
-            
-            time_start = time.time()
-            while (time.time() < time_start + show_time) or show_time == 0:
-                pass
-            self.matrix.Clear()
-            return
-            
-        
-        except asyncio.CancelledError:
-            print("heyoy")
-            return
-                
+#    async def display_image(self, args):
+#        file_name = args.get("image")
+#        show_time = int(args.get("duration", 5))
+#        if show_time == 0:
+#            self.flag_infinity = True
+#        size = args.get("size", "full")
+#        if size != "full":
+#            size = size.split("x")
+#            image_width = int(size[0])
+#            image_height = int(size[1])
+#        else: 
+#            image_width = self.matrix.width
+#            image_height = self.matrix.height
+#        offset_x, offset_y= 0, 0
+#
+#        print(f"Animating '{file_name}'\n")
+#        ## Check if URL
+#        if "http" in file_name:
+#            image = Image.open(requests.get(file_name, stream=True).raw) 
+#        else:
+#            image = Image.open("visual_aid/" + file_name)
+#
+#        image.thumbnail((image_width, image_height), Image.ANTIALIAS)
+#        if image.width != self.matrix.width: offset_x = (self.matrix.width - image.width)/2
+#        if image.height != self.matrix.height: offset_y = (self.matrix.height - image.height)/2
+#
+#        try:
+#            self.matrix.SetImage(image.convert('RGB'), offset_x, offset_y)
+#            #if show_time != 0:
+#            
+#            time_start = time.time()
+#            while (time.time() < time_start + show_time) or show_time == 0:
+#                pass
+#            self.matrix.Clear()
+#            return
+#            
+#        
+#        except asyncio.CancelledError:
+#            print("heyoy")
+#            return
     
     async def display_gif(self, args): 
         file_name = args.get("image")
