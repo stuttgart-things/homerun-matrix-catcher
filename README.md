@@ -52,6 +52,7 @@ sudo apt install make -y
 sudo apt install g++ -y 
 sudo apt install python3-pip -y
 
+# cd homerun-matrix-catcher/
 pip install -r requirements.txt
 
 ```
