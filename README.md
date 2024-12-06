@@ -44,13 +44,12 @@ clone repository for library: https://github.com/hzeller/rpi-rgb-led-matrix
 clone repository homerun matrix: https://github.com/stuttgart-things/homerun-matrix-catcher.git
 
 ```bash
+sudo apt-get update
 sudo apt install python3.12-venv -y
 python3 -m venv .venv
 source .venv/bin/activate
 
-sudo apt install make -y
-sudo apt install g++ -y 
-sudo apt install python3-pip -y
+sudo apt install make g++ python3-pip python3-dev cython3 -y
 
 # cd homerun-matrix-catcher/
 pip install -r requirements.txt
@@ -66,15 +65,16 @@ https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python
 in lib/Makefile HARDWARE_DESC? auf adafruit-hat-pwm
 
 ```bash
-sudo apt-get update && sudo apt-get install python3-dev cython3 -y
 cd /bindings/python
 make build-python 
 sudo make install-python 
+```
 
+```bash
 #Audiotreiber deaktivieren
-cd /etc/modprobe.d/blacklist #rebootfeste einstellung - snd_bcm2835 in die file schreiben
-# nicht reboot fester command
-modprobe -r snd_bcm2835
+cat <<EOF > /etc/modprobe.d/blacklist
+snd_bcm2835
+EOF
 ```
 
 ---------------------------------------------------
