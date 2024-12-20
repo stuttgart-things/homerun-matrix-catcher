@@ -16,11 +16,9 @@ def generate_random_event():
         "Latency exceeds 200ms",
         "Service successfully restarted"
     ]
-    severities = ["SUCCESS", "WARNING"]
-    #severities = ["INFO", "WARNING", "ERROR", "SUCCESS"]
+    severities = ["INFO", "WARNING", "ERROR", "SUCCESS"]
     authors = ["Monitoring System", "System Admin", "Automated Alert", "DevOps Team"]
-    systems = ["ansible", "scale"]
-    #systems = ["github", "gitlab", "ansible", "scale"]
+    systems = ["github", "gitlab", "ansible", "scale"]
     tags_options = [
         "server, monitoring, cpu",
         "disk, alert, storage",
