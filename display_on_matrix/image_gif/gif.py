@@ -27,11 +27,12 @@ async def display_gif(self, args):
             f.write(requests.get(file_name).content)
         gif = Image.open("/tmp/" + save_as)#, stream=True).raw)
     else:
-        try:
-            gif = Image.open("visual_aid/" + file_name)
-        except PIL.UnidentifiedImageError:
-            problem_files.append(path)
-            print(problem_files)
+        gif = Image.open("visual_aid/" + file_name)
+        #try:
+        #    gif = Image.open("visual_aid/" + file_name)
+        #except PIL.UnidentifiedImageError:
+        #    problem_files.append(path)
+        #    print(problem_files)
 
     try:
         num_frames = gif.n_frames
