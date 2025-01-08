@@ -24,11 +24,12 @@ async def display_image(self, args):
     if "http" in file_name:
         image = Image.open(requests.get(file_name, stream=True).raw) 
     else:
-        try:
-            image = Image.open("visual_aid/" + file_name)
-        except PIL.UnidentifiedImageError:
-            problem_files.append(path)
-            print(problem_files)
+        image = Image.open("visual_aid/" + file_name)
+        #try:
+        #    image = Image.open("visual_aid/" + file_name)
+        #except PIL.UnidentifiedImageError:
+        #    problem_files.append(path)
+        #    print(problem_files)
         
 
     image.thumbnail((image_width, image_height), Image.ANTIALIAS)
