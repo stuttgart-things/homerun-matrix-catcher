@@ -1,71 +1,26 @@
 ---
-name: Release module
+name: Release Ansible Module
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
-      module-name:
+      release-tag:
+        description: release-tag
         required: true
         type: string
-      tag-name:
-        required: true
-        type: string
-      archive-kind:
-        required: false
-        type: string
-        default: zip
       release-message:
+        description: release-message
         required: true
         type: string
-      runs-on:
-        required: true
-        type: string
-        default: ghr-homerun-matrix-catcher-skyami-cicd
-      environment-name:
-        default: k8s
-        required: true
-        type: string
-      continue-error:
-        default: false
-        required: true
-        type: boolean
 
 jobs:
-  Package-Relase-Module:
-    runs-on: ${{ inputs.runs-on }}
-    container:
-      image: joshkeegan/zip:3.21.0
-    environment: ${{ inputs.environment-name }}
-    permissions:
-      contents: write
-    continue-on-error: ${{ inputs.continue-error }}
-    steps:
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: '0'
-
-      - name: Package module (zip)
-        id: zip
-        if: ${{ inputs.archive-kind == 'zip' }}
-        run: |
-          zip -r ${{ inputs.module-name }}.zip * -j
-          echo "artifact=${{ inputs.module-name }}.zip" >> $GITHUB_ENV
-
-      - name: Package module (tar.gz)
-        id: tar
-        if: ${{ inputs.archive-kind == 'tar.gz' }}
-        run: |
-          artifact=$(basename $PWD).tar.gz
-          touch ${artifact}
-          tar -czf ${artifact} --exclude=${artifact} .
-          echo "artifact=${artifact}" >> $GITHUB_ENV
-
-      - name: Release module
-        id: release
-        uses: ncipollo/release-action@v1.14.0
-        with:
-          name: ${{ inputs.tag-name }}
-          artifacts: ${{ env.artifact }}
-          body: ${{ inputs.release-message }}
-          tag: ${{ inputs.tag-name }}
+  release-ansible:
+    name: Release
+    uses: stuttgart-things/github-workflow-templates/.github/workflows/call-release-module.yaml@feature/add-homerun-task-go # ansible-lint-24.2.1
+    with:
+      module-name: install-configure-docker
+      tag-name: "${{ github.event.inputs.release-tag }}"
+      release-message: "${{ github.event.inputs.release-message }}"
+      environment-name: k8s
+      archive-kind: tar.gz
+      runs-on: ghr-homerun-matrix-catcher-skyami-cicd
+      continue-error: false
