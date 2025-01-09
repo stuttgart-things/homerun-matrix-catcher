@@ -16,7 +16,7 @@ def generate_random_event():
         "Latency exceeds 200ms",
         "Service successfully restarted"
     ]
-    severities = ["INFO", "WARNING", "FAILED", "SUCCESS"]
+    severities = ["INFO", "WARNING", "ERROR", "SUCCESS"]
     authors = ["Monitoring System", "System Admin", "Automated Alert", "DevOps Team"]
     systems = ["github", "gitlab", "ansible", "scale"]
     tags_options = [
@@ -47,7 +47,7 @@ def generate_random_event():
 
     # Generate a random timestamp 1-15 seconds in the past
     current_time = datetime.datetime.now().timestamp()
-    random_time_offset = random.randint(1, 8)  # Random seconds
+    random_time_offset = random.randint(1, 3)  # Random seconds
     random_timestamp = current_time - random_time_offset
     random_system = random.choice(systems)
     if "scale" in random_system:
