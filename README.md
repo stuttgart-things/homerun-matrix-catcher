@@ -39,12 +39,14 @@ source /home/sthings/.profile
 
 ## Run Ansible to install tools
 
+Inventory
 ```bash
 cat <<EOF > /tmp/inventory_raspi
 192.168.1.xxx ansible_user=sthings ansible_password=<password> ansible_become_pass=<password> ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 EOF
 ```
 
+Ansible play
 ```bash
 cat <<EOF > /tmp/raspi-betankung.yaml
 - name: Install essential tools on Raspbian
@@ -121,22 +123,28 @@ pip install -r /tmp/requirements_new_raspi.txt
 
 (reference Readme at: https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
 
-```bash
-sudo nano /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
-
+Edit Makefile
 # Comment out this line:
 HARDWARE_DESC?=regular
 
 # Uncomment this line:
 #HARDWARE_DESC=adafruit-hat-pwm
+
+```bash
+sudo nano /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
 ```
 
 ```bash
 sudo -i
+```
+
+```bash
 # Activate venv while root
 cd /home/sthings &&
 source .venv/bin/activate
+```
 
+```bash
 # Build and install matrix library
 cd lib/rpi-rgb-led-matrix//bindings/python
 make build-python 
@@ -159,6 +167,6 @@ sudo update-initramfs -u
 ## Execute
 
 ```bash
-cd /home/sthings/homerun-matrix-catcher
+cd /home/sthings/homerun-matrix-catcher &&
 python3 -E demo_generate.py --profile rules/test-matrix-config.yaml
 ```
