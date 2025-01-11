@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from display_on_matrix.image_gif.gif import display_gif
 
 # WIP
-def run_mock_test():
+def run_mock_test_gif():
     class MockMatrix:
         def __init__(self):
             self.width = 64

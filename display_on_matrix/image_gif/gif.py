@@ -7,7 +7,6 @@ from helper_functions.arguments import get_speed
 async def display_gif(self, args): 
     file_name = args.get("image")
     show_time = int(args.get("duration", 5))
-    problem_files = []
     if show_time == 0:
         self.flag_infinity = True
     speed = get_speed(args.get("speed","2"))
@@ -28,11 +27,6 @@ async def display_gif(self, args):
         gif = Image.open("/tmp/" + save_as)#, stream=True).raw)
     else:
         gif = Image.open("visual_aid/" + file_name)
-        #try:
-        #    gif = Image.open("visual_aid/" + file_name)
-        #except PIL.UnidentifiedImageError:
-        #    problem_files.append(path)
-        #    print(problem_files)
 
     try:
         num_frames = gif.n_frames

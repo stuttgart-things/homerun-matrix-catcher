@@ -3,6 +3,14 @@ import asyncio
 async def display_task(self, event):
     print("Running event: " + str(event))
 
+    if self.mock:
+        print("Mock mode enabled, running mock function.")
+        if event["mode"].strip().lower()=="image":
+            run_mock_test_image(event.get("args", {}))
+        elif event["mode"].strip().lower()=="gif":
+            run_mock_test_gif(event.get("args", {}))
+        return
+
     if event["mode"].strip().lower()=="static":
         self.animation_task = asyncio.create_task(self.static_text(event.get("args",{}),ticker=False))
 

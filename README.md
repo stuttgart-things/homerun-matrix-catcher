@@ -1,97 +1,158 @@
-Run Python rgb-led-sink:
-sudo python -E demo_redis.py --profile test_files/test-matrix-config.yaml
 
-Modes:
-	- image
-		- file: Name of file within visual_aid/ or url.
-		- time: Time to display image. Input 0 for infinit display.
-		- size: Size of image within matrix. Ex. 32x32. Input "full" for fullscreen.
+## Raspbian Setup:
 
-	- gif
-		- file: Name of file within visual_aid/ or url.
-		- time: Time to display gif. Input 0 for infinit display.
-		- size: Size of gif within matrix. Ex. 32x32. Input "full" for fullscreen.
-		- speed: Speed of gif. Speed options [1,2,3,4,5]. Default speed: 2.
+OS-Requirement:
+Raspberry Pi OS (Legacy) Lite
+Release date: October 22nd 2024
+System: 32-bit
+Kernel version: 6.1
+Debian version: 11 (bullseye)
+(Python: Python3.9)
 
-	- text
-		- text:
-		- font:
-		- color:
-		- speed: 
-		- time:
-
-	- ticker
-		- text:
-		- font:
-		- color:
-		- speed: 
-		- loops: 
+(donwload-link: https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz)
 
 
-Input Example:
-
-	- {"Mode":"text", "Args":{"text":"Hallo Sthings!","font":"9x18.bdf", "color":"(164,38,201)"}}
-	- {"Mode":"image"}
-	- {"Mode":"gif", "Args":{"file":"https://i.gifer.com/XOsX.gif"}}
-	- {"Mode":"gif", "Args":{"file":"https://i.gifer.com/XOsX.gif","size":"32x32", "speed":"5"}}
-
-
----------------------
-## Raspi betankung:
-
-clone repository for library: https://github.com/hzeller/rpi-rgb-led-matrix
-
-clone repository homerun matrix: https://github.com/stuttgart-things/homerun-matrix-catcher.git
+# Activate SSH
 
 ```bash
-sudo apt-get update
-sudo apt install python3.12-venv -y
+sudo raspi-config
+```
+
+# Virtual environment download, install and setup
+
+```bash
+sudo apt install python3-venv
 python3 -m venv .venv
+```
+
+```bash
+# Activate venv on login
+echo -e "\n# Activate virtual environment on login\nif [ -d \"/home/sthings/.venv\" ]; then\n    source .venv/bin/activate\nfi" >> /home/sthings/.profile
+source /home/sthings/.profile
+```
+
+# Run Ansible to install tools
+
+```bash
+cat <<EOF > /tmp/inventory_raspi
+192.168.1.xxx ansible_user=sthings ansible_password=<password> ansible_become_pass=<password> ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+EOF
+```
+
+```bash
+cat <<EOF > /tmp/raspi-betankung.yaml
+- name: Install essential tools on Raspbian
+  hosts: "{{ target_host | default('all') }}"
+  become: yes
+  vars:
+    os_packages:
+      - git
+      - curl
+      - unzip
+      - wget
+      - make
+      - g++
+      - python3-pip
+      - python3-dev
+      - cython3
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install git, curl, and wget etc..
+      ansible.builtin.apt:
+        name: "{{ os_packages }}"
+        state: present
+EOF
+```
+
+```bash
+ansible-playbook -i /tmp/inventory_raspi /tmp/raspi-betankung.yaml -vv
+```
+
+# Create Directories and download Repos
+
+```bash
+mkdir lib &&
+mkdir homerun-matrix-catcher
+```
+
+```bash
+cd lib &&
+git clone https://github.com/hzeller/rpi-rgb-led-matrix.git
+```
+
+```bash
+cd /home/sthings/ &&
+wget https://github.com/stuttgart-things/homerun-matrix-catcher/releases/download/0.1.1/homerun-matrix-catcher.tar.gz &&
+tar -xzf homerun-matrix-catcher.tar.gz -C ./homerun-matrix-catcher
+```
+
+# Install python requirements
+
+```bash
+pip install -r /home/sthings/homerun-matrix-catcher/requirements_new_raspi.txt
+```
+
+OR
+
+<details><summary>Save requirements to file and scp to new raspi</summary>
+
+```bash
+# execute on original raspi
+pip freeze > /tmp/requirements_new_raspi.txt
+scp /tmp/requirements_new_raspi.txt sthings@192.168.1.xxx:/tmp/requirements_new_raspi.txt
+
+# execute on new raspi
+pip install -r /tmp/requirements_new_raspi.txt
+```
+
+</details>
+
+# Build and install matrix library
+
+(reference Readme at: https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
+
+```bash
+sudo nano /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
+
+# Comment out this line:
+HARDWARE_DESC?=regular
+
+# Uncomment this line:
+#HARDWARE_DESC=adafruit-hat-pwm
+```
+
+```bash
+sudo -i
+# Activate venv while root
+cd /home/sthings &&
 source .venv/bin/activate
 
-sudo apt install make g++ python3-pip python3-dev cython3 -y
-
-# cd homerun-matrix-catcher/
-pip install -r requirements.txt
-
-```
-
-lib installieren:
-ref:
-https://codehub.sva.de/Lab/stuttgart-things/dev/homerun-matrix-catcher
-auf hier klicken
-https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python
-
-in lib/Makefile HARDWARE_DESC? auf adafruit-hat-pwm
-
-```bash
-cd /bindings/python
+# Build and install matrix library
+cd lib/rpi-rgb-led-matrix//bindings/python
 make build-python 
-sudo make install-python 
+make install-python 
 ```
 
+# Deaktivate Audiodriver
+
 ```bash
-#Audiotreiber deaktivieren
+# save for reboot
 cat <<EOF > /etc/modprobe.d/blacklist
 snd_bcm2835
 EOF
 ```
 
----------------------------------------------------
+```bash
+sudo update-initramfs -u
+```
 
+# Execute
 
-
-(make -C examples-api-use)
-(sudo examples-api-use/demo -D 1 examples-api-use/runtext.ppm --led-no-hardware-pulse --led-gpio-mapping=adafruit-hat)
-
-
-execute:
-sudo -E  python3 -E demo_generate.py --profile test_files/test-matrix-config.yaml
-oder 
-deactivate venv
-sudo  python3 -E demo_generate.py --profile test_files/test-matrix-config.yaml
-
-
-next steps:
-https://docs.python.org/3/library/unittest.mock.html
-
+```bash
+cd /home/sthings/homerun-matrix-catcher
+python3 -E demo_generate.py --profile rules/test-matrix-config.yaml
+```
