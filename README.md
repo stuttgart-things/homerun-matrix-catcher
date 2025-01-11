@@ -124,11 +124,13 @@ pip install -r /tmp/requirements_new_raspi.txt
 (reference Readme at: https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
 
 Edit Makefile
+```
 # Comment out this line:
 HARDWARE_DESC?=regular
 
 # Uncomment this line:
 #HARDWARE_DESC=adafruit-hat-pwm
+```
 
 ```bash
 sudo nano /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
