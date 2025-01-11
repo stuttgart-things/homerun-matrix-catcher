@@ -16,6 +16,11 @@ OS-Requirement:
 ## Activate SSH
 
 ```bash
+# Use the arrow keys to navigate to Interface Options and press Enter.
+# Select SSH and press Enter.
+# You will be asked if you want to enable the SSH server. Select Yes and press Enter.
+# After enabling SSH, navigate to Finish and press Enter.
+# You may be prompted to reboot your Raspberry Pi. If so, select Yes to reboot.
 sudo raspi-config
 ```
 
