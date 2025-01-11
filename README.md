@@ -1,24 +1,25 @@
 
-## Raspbian Setup:
+# Raspbian Setup:
 
 OS-Requirement:
-Raspberry Pi OS (Legacy) Lite
-Release date: October 22nd 2024
-System: 32-bit
-Kernel version: 6.1
-Debian version: 11 (bullseye)
+* Raspberry Pi OS (Legacy) Lite
+* Release date: October 22nd 2024
+* System: 32-bit
+* Kernel version: 6.1
+* Debian version: 11 (bullseye)
+
 (Python: Python3.9)
 
 (donwload-link: https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz)
 
 
-# Activate SSH
+## Activate SSH
 
 ```bash
 sudo raspi-config
 ```
 
-# Virtual environment download, install and setup
+## Virtual environment download, install and setup
 
 ```bash
 sudo apt install python3-venv
@@ -31,7 +32,7 @@ echo -e "\n# Activate virtual environment on login\nif [ -d \"/home/sthings/.ven
 source /home/sthings/.profile
 ```
 
-# Run Ansible to install tools
+## Run Ansible to install tools
 
 ```bash
 cat <<EOF > /tmp/inventory_raspi
@@ -72,7 +73,7 @@ EOF
 ansible-playbook -i /tmp/inventory_raspi /tmp/raspi-betankung.yaml -vv
 ```
 
-# Create Directories and download Repos
+## Create Directories and download Repos
 
 ```bash
 mkdir lib &&
@@ -90,7 +91,7 @@ wget https://github.com/stuttgart-things/homerun-matrix-catcher/releases/downloa
 tar -xzf homerun-matrix-catcher.tar.gz -C ./homerun-matrix-catcher
 ```
 
-# Install python requirements
+## Install python requirements
 
 ```bash
 pip install -r /home/sthings/homerun-matrix-catcher/requirements_new_raspi.txt
@@ -111,7 +112,7 @@ pip install -r /tmp/requirements_new_raspi.txt
 
 </details>
 
-# Build and install matrix library
+## Build and install matrix library
 
 (reference Readme at: https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
 
@@ -137,7 +138,7 @@ make build-python
 make install-python 
 ```
 
-# Deaktivate Audiodriver
+## Deaktivate Audiodriver
 
 ```bash
 # save for reboot
@@ -150,7 +151,7 @@ EOF
 sudo update-initramfs -u
 ```
 
-# Execute
+## Execute
 
 ```bash
 cd /home/sthings/homerun-matrix-catcher
