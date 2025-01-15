@@ -10,7 +10,7 @@ OS-Requirement:
 
 (Python: Python3.9)
 
-(donwload-link: https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz)
+(donwload-link: [https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz])
 
 
 ## Activate SSH
@@ -121,14 +121,14 @@ pip install -r /tmp/requirements_new_raspi.txt
 
 ## Build and install matrix library
 
-(reference Readme at: https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
+(reference Readme at: [https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python])
 
-Edit Makefile
+Edit /lib/Makefile
 ```
-# Comment out this line:
+# Comment out this line (no):
 HARDWARE_DESC?=regular
 
-# Uncomment this line:
+# Uncomment this line (yes):
 #HARDWARE_DESC=adafruit-hat-pwm
 ```
 
