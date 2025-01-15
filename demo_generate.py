@@ -8,7 +8,7 @@ import signal
 async def example_consumer(event: dict):
     print(f"Received event: {event}")
 
-async def main(rules):
+async def main(rules, mock):
     file_source = RandomEventSource()
     rgb_sink = RGBSink()
 
@@ -19,7 +19,7 @@ async def main(rules):
     # Start event sources
     await asyncio.gather(
         file_source.start(),
-        rgb_sink.start(rules)
+        rgb_sink.start(rules, mock)
     )
     
     print("Async functions have been interrupted.")
@@ -27,9 +27,11 @@ async def main(rules):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script that displays events in matrix")
     parser.add_argument("--profile", required=True, help="Yaml Rule file")
+    parser.add_argument("--mock", required=False, action="store_true", help="Enable mock mode")
     args = parser.parse_args()
 
     profile_yaml = args.profile
+    mock_mode = args.mock
 
     # Run the main function
-    asyncio.run(main(profile_yaml))
+    asyncio.run(main(profile_yaml, mock_mode))

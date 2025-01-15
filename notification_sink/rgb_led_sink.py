@@ -23,16 +23,17 @@ from helper_functions.event_list import build_event_list, run_event_list
 from helper_functions.rules import get_rules
 
 class RGBSink():
-    def __init__(self):
-        options = RGBMatrixOptions()
+    def __init__(self, mock):
+        #options = RGBMatrixOptions()
 
-        options.rows = 64
-        options.cols = 64
-        options.chain_length = 1
-        options.parallel = 1
-        options.hardware_mapping = "adafruit-hat"
+        #options.rows = 64
+        #options.cols = 64
+        #options.chain_length = 1
+        #options.parallel = 1
+        #options.hardware_mapping = "adafruit-hat"
 
-        self.matrix = RGBMatrix(options = options)
+        self.mock = mock
+        self.matrix = self.initialize_matrix() if not mock else None
         self.queue = asyncio.Queue()
 
         self.stop_event = asyncio.Event()
@@ -43,6 +44,20 @@ class RGBSink():
         self.pending_events = []
         self.event_args = None
         self.rules = None
+
+    def initialize_matrix(self):
+        try:
+            # Attempt to initialize the matrix
+            options = RGBMatrixOptions()
+            options.rows = 64
+            options.cols = 64
+            options.chain_length = 1
+            options.parallel = 1
+            options.hardware_mapping = "adafruit-hat"
+            return RGBMatrix(options=options)
+        except RuntimeError as e:
+            print(f"Failed to initialize matrix: {e}")
+            return None
 
     async def start(self, rules_file):
         self.rules = get_rules(rules_file)

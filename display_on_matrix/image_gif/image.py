@@ -6,7 +6,6 @@ import requests
 async def display_image(self, args):
     file_name = args.get("image")
     show_time = int(args.get("duration", 5))
-    problem_files = []
     if show_time == 0:
         self.flag_infinity = True
     size = args.get("size", "full")
@@ -24,13 +23,7 @@ async def display_image(self, args):
     if "http" in file_name:
         image = Image.open(requests.get(file_name, stream=True).raw) 
     else:
-        image = Image.open("visual_aid/" + file_name)
-        #try:
-        #    image = Image.open("visual_aid/" + file_name)
-        #except PIL.UnidentifiedImageError:
-        #    problem_files.append(path)
-        #    print(problem_files)
-        
+        image = Image.open("visual_aid/" + file_name)        
 
     image.thumbnail((image_width, image_height), Image.ANTIALIAS)
     if image.width != self.matrix.width: offset_x = (self.matrix.width - image.width)/2
