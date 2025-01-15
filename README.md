@@ -10,7 +10,7 @@ OS-Requirement:
 
 (Python: Python3.9)
 
-(donwload-link: [https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz])
+Donwload iso-image [click here](https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-10-28/2024-10-22-raspios-bullseye-armhf-lite.img.xz)
 
 
 ## Activate SSH
@@ -121,19 +121,13 @@ pip install -r /tmp/requirements_new_raspi.txt
 
 ## Build and install matrix library
 
-(reference Readme at: [https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python])
+Reference [Readme](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python)
 
-Edit /lib/Makefile
-```
-# Comment out this line (no):
-HARDWARE_DESC?=regular
+Edit Makefile
 
-# Uncomment this line (yes):
-#HARDWARE_DESC=adafruit-hat-pwm
-```
 
 ```bash
-sudo nano /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
+sudo sed -i 's/^HARDWARE_DESC?=regular/#HARDWARE_DESC?=regular/; s/^#HARDWARE_DESC=adafruit-hat-pwm/HARDWARE_DESC=adafruit-hat-pwm/' /home/sthings/lib/rpi-rgb-led-matrix/lib/Makefile
 ```
 
 ```bash
@@ -148,7 +142,7 @@ source .venv/bin/activate
 
 ```bash
 # Build and install matrix library
-cd lib/rpi-rgb-led-matrix//bindings/python
+cd lib/rpi-rgb-led-matrix/bindings/python
 make build-python 
 make install-python 
 ```
