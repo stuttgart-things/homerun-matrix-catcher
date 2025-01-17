@@ -10,12 +10,12 @@ import os
 async def example_consumer(event: dict):
     print(f"Received event from  {event}")
 
-async def main(rules):
+async def main(rules, gen_gifs):
     # Create a Redis client
     #redis_client = redis.from_url("redis://localhost", decode_responses=True)
 
     stream_source = RedisStreamsSource()
-    rgb_sink = RGBSink()
+    rgb_sink = RGBSink(gen_gifs)
 
     # Register the example consumer
     stream_source.register_consumer(rgb_sink.consume)
@@ -27,7 +27,7 @@ async def main(rules):
     
     await asyncio.gather(
         stream_source.start(),
-        rgb_sink.start(rules)
+        rgb_sink.start(rules, gen_gifs)
     )
 
     # Wait indefinitely until a SIGTERM signal is received
@@ -50,6 +50,7 @@ async def main(rules):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script that displays events in matrix")
     parser.add_argument("--profile", required=True, help="Yaml Rule file")
+    parser.add_argument("--generategifs", action="store_true", help="Display generated gifs function")
     #parser.add_argument("--events", required=True, help="File with json events")
     #parser.add_argument("--host", required=True, help="Redis host")
     #parser.add_argument("--port", required=True, help="Redis port")
@@ -57,6 +58,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     profile_yaml = args.profile
+    gen_gifs = args.generategifs
     #events = args.events
     # Run the main function
-    asyncio.run(main(profile_yaml))
+    asyncio.run(main(profile_yaml, gen_gifs))

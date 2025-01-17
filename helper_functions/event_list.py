@@ -19,7 +19,7 @@ async def build_event_list(queue, rules, pending_events):
         print(pending_events)
         print("\n\n")
 
-async def run_event_list(pending_events, display_task):
+async def run_event_list(pending_events, display_task, gen_gifs):
     while True:
         print(f"evaluating pending events, {len(pending_events)} left")
         if pending_events:
@@ -31,7 +31,7 @@ async def run_event_list(pending_events, display_task):
             print(f"The time difference is: {time_difference}")
             if event_expired:
                 print(f"Running event: {event_args}")
-                await display_task(event_args)
+                await display_task(event_args, gen_gifs)
             else:
                 print("Events expired not showing")
 
