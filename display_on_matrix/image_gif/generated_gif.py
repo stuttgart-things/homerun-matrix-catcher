@@ -7,12 +7,13 @@ from helper_functions.arguments import get_speed
 async def display_generated_gif(self, args): 
     file_name = args.get("image")
     show_time = int(args.get("duration", 5))
-    problem_files = []
 
     if show_time == 0:
         self.flag_infinity = True
+
     speed = get_speed(args.get("speed", "2"))
     size = args.get("size", "full")
+
     if size != "full":
         size = size.split("x")
         image_width = int(size[0])
@@ -20,15 +21,13 @@ async def display_generated_gif(self, args):
     else:
         image_width = self.matrix.width
         image_height = self.matrix.height
+
     offset_x, offset_y = 0, 0
 
-    if "http" in file_name:
-        save_as = file_name.split("/")[-1]
-        with open(f'/tmp/{save_as}', 'wb') as f:
-            f.write(requests.get(file_name).content)
-        gif = Image.open("/tmp/" + save_as)
-    else:
-        gif = Image.open("visual_aid/generated/" + file_name)
+##########
+
+
+    gif = Image.open("visual_aid/generated/" + file_name)
 
     try:
         num_frames = gif.n_frames
