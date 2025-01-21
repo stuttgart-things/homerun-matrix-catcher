@@ -14,7 +14,8 @@ def evaluate_event_timing(event, maxtime):
     """
     # Parse the event's timestamp
     maxAge = datetime.timedelta(seconds=maxtime)
-    event_time = datetime.datetime.fromtimestamp(event["timestamp"])
+    timestamp_convert = int(event["timestamp"])
+    event_time = datetime.datetime.fromtimestamp(timestamp_convert)
     print(event_time)
     current_time = datetime.datetime.now()
     print(current_time)

@@ -8,6 +8,22 @@ matrixConfig:
       - ERROR
     image: GITHUB_ERROR.gif
     duration: 5
+  github_success:
+    kind: gif
+    systems:
+      - github
+    severity:
+      - SUCCESS
+    image: GITHUB_SUCCESS.gif
+    duration: 5
+  github_info:
+    kind: gif
+    systems:
+      - github
+    severity:
+      - INFO
+    image: GITHUB_INFO.gif
+    duration: 5
   gitlab_error:
     kind: gif
     systems:
@@ -16,6 +32,22 @@ matrixConfig:
       - ERROR
     image: GITLAB_ERROR.gif
     duration: 5
+  gitlab_success:
+    kind: gif
+    systems:
+      - gitlab
+    severity:
+      - SUCCESS
+    image: GITLAB_SUCCESS.gif
+    duration: 5
+  gitlab_info:
+    kind: gif
+    systems:
+      - gitlab
+    severity:
+      - INFO
+    image: GITLAB_INFO.gif
+    duration: 5
   ansible_success:
     kind: gif
     systems:
@@ -23,6 +55,22 @@ matrixConfig:
     severity:
       - SUCCESS
     image: ANSIBLE_SUCCESS.gif
+    duration: 5
+  ansible_info:
+    kind: gif
+    systems:
+      - ansible
+    severity:
+      - INFO
+    image: ANSIBLE_INFO.gif
+    duration: 5
+  ansible_error:
+    kind: gif
+    systems:
+      - ansible
+    severity:
+      - ERROR
+    image: ANSIBLE_ERROR.gif
     duration: 5
   scale_text:
     kind: static

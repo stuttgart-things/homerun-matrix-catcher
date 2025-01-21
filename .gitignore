@@ -2,5 +2,5 @@
 __pycache__
 .venv
 
-#visual_aid/*
-#!visual_aid/sthings.png
+visual_aid/*
+!visual_aid/generated/example.gif
