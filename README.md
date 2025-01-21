@@ -163,6 +163,13 @@ sudo update-initramfs -u
 ## Execute
 
 ```bash
+# Execute with random generated events
 cd /home/sthings/homerun-matrix-catcher &&
 python3 -E demo_generate.py --profile rules/test-matrix-config.yaml
+```
+
+```bash
+# Execute with redis events and generated gifs
+cd /home/sthings/homerun-matrix-catcher &&
+python3 -E demo_redis.py --profile rules/rules2.yaml --generategifs
 ```

@@ -8,9 +8,9 @@ import signal
 async def example_consumer(event: dict):
     print(f"Received event: {event}")
 
-async def main(rules, mock):
+async def main(rules, gen_gifs, maxtime):
     file_source = RandomEventSource()
-    rgb_sink = RGBSink()
+    rgb_sink = RGBSink(gen_gifs)
 
     # Register the example consumer
     file_source.register_consumer(rgb_sink.consume)
@@ -19,7 +19,7 @@ async def main(rules, mock):
     # Start event sources
     await asyncio.gather(
         file_source.start(),
-        rgb_sink.start(rules, mock)
+        rgb_sink.start(rules, gen_gifs, maxtime)
     )
     
     print("Async functions have been interrupted.")
@@ -27,11 +27,16 @@ async def main(rules, mock):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script that displays events in matrix")
     parser.add_argument("--profile", required=True, help="Yaml Rule file")
-    parser.add_argument("--mock", required=False, action="store_true", help="Enable mock mode")
+    parser.add_argument("--generategifs", action="store_true", help="Display generated gifs function")
+    #parser.add_argument("--mock", required=False, action="store_true", help="Enable mock mode")
+    parser.add_argument("--maxtime", type=int, default=120, required=False, help="Maximum time in seconds")
+    
     args = parser.parse_args()
 
     profile_yaml = args.profile
-    mock_mode = args.mock
+    gen_gifs = args.generategifs
+    maxtime = args.maxtime
+    #mock_mode = args.mock
 
     # Run the main function
-    asyncio.run(main(profile_yaml, mock_mode))
+    asyncio.run(main(profile_yaml, gen_gifs, maxtime))#, mock_mode))

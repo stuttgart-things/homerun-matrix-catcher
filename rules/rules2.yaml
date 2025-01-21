@@ -1,0 +1,38 @@
+---
+matrixConfig:
+  github_error:
+    kind: gif
+    systems:
+      - github
+    severity:
+      - ERROR
+    image: GITHUB_ERROR.gif
+    duration: 5
+  gitlab_error:
+    kind: gif
+    systems:
+      - gitlab
+    severity:
+      - ERROR
+    image: GITLAB_ERROR.gif
+    duration: 5
+  ansible_success:
+    kind: gif
+    systems:
+      - ansible
+    severity:
+      - SUCCESS
+    image: ANSIBLE_SUCCESS.gif
+    duration: 5
+  scale_text:
+    kind: static
+    systems:
+      - scale
+    severity:
+      - WARNING
+      - INFO
+    text: |
+      {{ message | replace('WEIGHT: ','') }}g
+    speed: 5
+    font: myfont.bdf
+
