@@ -27,13 +27,9 @@ async def display_generated_gif(self, args, event):
 
     offset_x, offset_y = 0, 0
 
-##########
-
     gif_path = generate_gif(display_severity, display_system)
 
     gif = Image.open(gif_path)
-
-    #gif = Image.open("visual_aid/generated/" + file_name)
 
     try:
         num_frames = gif.n_frames

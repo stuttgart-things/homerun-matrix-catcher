@@ -1,6 +1,6 @@
 import datetime
 
-def evaluate_event_timing(event, maxAge):
+def evaluate_event_timing(event, maxtime):
     """
     Compare an event's timestamp with the current time.
 
@@ -13,7 +13,7 @@ def evaluate_event_timing(event, maxAge):
         bool: True if the event is valid (you should fire it), False if it's too old.
     """
     # Parse the event's timestamp
-    maxAge = datetime.timedelta(seconds=maxAge)
+    maxAge = datetime.timedelta(seconds=maxtime)
     event_time = datetime.datetime.fromtimestamp(event["timestamp"])
     print(event_time)
     current_time = datetime.datetime.now()

@@ -46,9 +46,9 @@ class RGBSink():
         self.event_args = None
         self.rules = None
     
-    async def start(self, rules_file, gen_gifs):
+    async def start(self, rules_file, gen_gifs, maxtime):
         self.rules = get_rules(rules_file)
-        self.task = asyncio.create_task(self.run(gen_gifs))
+        self.task = asyncio.create_task(self.run(gen_gifs, maxtime))
 
     async def stop(self):
         if self.task:
@@ -58,13 +58,13 @@ class RGBSink():
     async def build_event_list(self):
         await build_event_list(self.queue, self.rules, self.pending_events)
 
-    async def run_event_list(self, gen_gifs):
-        await run_event_list(self.pending_events, self.display_task, gen_gifs)
+    async def run_event_list(self, gen_gifs, maxtime):
+        await run_event_list(self.pending_events, self.display_task, gen_gifs, maxtime)
 
     async def display_task(self, event, gen_gifs):
         await display_task(self, event, gen_gifs)
 
-    async def run(self, gen_gifs):
+    async def run(self, gen_gifs, maxtime):
         try:
             ###
             print("running rgb sink\n")
@@ -72,7 +72,7 @@ class RGBSink():
             
             await asyncio.gather(
                 self.build_event_list(),
-                self.run_event_list(gen_gifs)
+                self.run_event_list(gen_gifs, maxtime)
             )
             #await self.build_event_list()
             #await self.run_event_list()
