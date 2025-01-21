@@ -162,6 +162,11 @@ sudo update-initramfs -u
 
 ## Execute
 
+Arguments:
+* --profile path/to/rulesfile : Use referenced Rules-File to define which kind of events get displayed on the matrix 
+* --generategifs              : To activate generic gif generation of the System and Severity of incoming events
+* --maxtime=100               : To increase or lower the time for pending events. Integer is in seconds
+
 ```bash
 # Execute with random generated events
 cd /home/sthings/homerun-matrix-catcher &&
@@ -171,5 +176,5 @@ python3 -E demo_generate.py --profile rules/test-matrix-config.yaml
 ```bash
 # Execute with redis events and generated gifs
 cd /home/sthings/homerun-matrix-catcher &&
-python3 -E demo_redis.py --profile rules/rules2.yaml --generategifs
+python3 -E demo_redis.py --profile rules/rules2.yaml --generategifs --maxtime=100 
 ```
