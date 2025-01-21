@@ -1,50 +1,69 @@
 from PIL import Image, ImageDraw, ImageFont
-import imageio
 
-# Function to create a frame with text
 def create_frame(background_color, text, text_color, font_path, size):
-    # Create an image with the background color
     img = Image.new("RGB", size, background_color)
     draw = ImageDraw.Draw(img)
 
     if text:
-        # Load the font (adjust the path to a font file on your system)
-        font = ImageFont.truetype(font_path, 60)  # Change size if needed
-
-        # Calculate text position for centering
-        text_bbox = draw.textbbox((0, 0), text, font=font)  # Get text bounding box
-        text_width = text_bbox[2] - text_bbox[0]  # Width of text
-        text_height = text_bbox[3] - text_bbox[1]  # Height of text
+        font = ImageFont.truetype(font_path, 60)
+        text_bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
         position = ((size[0] - text_width) // 2, (size[1] - text_height) // 2)
-
-        # Draw the text on the image
         draw.text(position, text, fill=text_color, font=font)
 
     return img
 
-# Parameters
-font_path = "/home/andre/Projects/zsprechstunde/images/convertingFonts/Xirod.otf"  # Change as needed
-size = (400, 300)  # Width x Height of GIF
-frames = []
+# Function to generate GIF
+def generate_gif(display_severity, display_system):
+    font_path = "/home/sthings/homerun-matrix-catcher/fonts/Xirod.otf"
+    size = (400, 300)
+    frames = []
+    background_color = (0, 0, 0)
+    system_background_color = (0, 0, 0)
+    font_color = "white"
 
-# Create multiple frames with different text and background colors
-texts_and_colors = [
-    ("SUCCESS", (0, 255, 0), "black"),   # Blue background with white text saying 'hello'
-    ("", (0, 0, 0), ""),             # Black background without text
-    ("ANSIBLE", (255, 255, 0), "black")  # Blue background with white text saying 'Sthings'
-]
+    if "ERROR" in display_severity:
+        background_color = (255, 0, 0)
+        display_severity = "ERROR"
+    if "SUCCESS" in display_severity:
+        background_color = (0, 255, 0)
+        font_color = "black"
+        display_severity = "SUCCESS"
 
-for text, bg_color, txt_color in texts_and_colors:
-    frame = create_frame(bg_color, text, txt_color, font_path, size)
-    frames.append(frame)
+    if "github" in display_system:
+        display_system = "GITHUB"
+        system_background_color = (0, 0, 255)
+    if "gitlab" in display_system:
+        display_system = "GITLAB"
+        system_background_color = (255, 165, 0)
+    if "ansible" in display_system:
+        display_system = "ANSIBLE"
+        system_background_color = (255, 255, 0)
+    if "scale" in display_system:
+        display_system = "SCALE"
+        system_background_color = (255, 192, 203)
 
-# Save as a GIF
-frames[0].save(
-    "/home/andre/Projects/zsprechstunde/images/created/ansible_success.gif",
-    save_all=True,
-    append_images=frames[1:],
-    duration=[500, 1, 500],  # Duration of each frame in milliseconds
-    loop=0  # Loop forever
-)
+    gif_name = display_system + "_" + display_severity + ".gif"
 
-print("GIF created: /created/output.gif")
+    texts_and_colors = [
+        (display_severity, background_color, font_color),
+        ("", (0, 0, 0), ""),
+        (display_system, system_background_color, font_color)
+    ]
+
+    for text, bg_color, txt_color in texts_and_colors:
+        frame = create_frame(bg_color, text, txt_color, font_path, size)
+        frames.append(frame)
+
+    base_path = "/home/sthings/homerun-matrix-catcher/visual_aid/generated/"
+    gif_path = base_path + gif_name
+    frames[0].save(
+        gif_path,
+        save_all=True,
+        append_images=frames[1:],
+        duration=[500, 1, 500],
+        loop=0
+    )
+    print(f"GIF created: {gif_path}")
+    return gif_path

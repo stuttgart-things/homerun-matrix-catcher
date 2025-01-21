@@ -19,6 +19,7 @@ from display_on_matrix.text.static import static_text
 from display_on_matrix.image_gif.image import display_image
 from display_on_matrix.image_gif.gif import display_gif
 from display_on_matrix.image_gif.generated_gif import display_generated_gif
+from display_on_matrix.generate_gifs.create_gifs import create_frame, generate_gif
 from helper_functions.arguments import get_speed, get_color
 from helper_functions.event_list import build_event_list, run_event_list
 from helper_functions.rules import get_rules
@@ -106,5 +107,5 @@ class RGBSink():
     async def display_gif(self, args):
         await display_gif(self, args)
 
-    async def display_generated_gif(self, args):
-        await display_generated_gif(self, args)
+    async def display_generated_gif(self, args, event):
+        await display_generated_gif(self, args, event)

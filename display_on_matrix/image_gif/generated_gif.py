@@ -3,10 +3,13 @@ import requests
 from PIL import Image
 import time
 from helper_functions.arguments import get_speed
+from display_on_matrix.generate_gifs.create_gifs import create_frame, generate_gif
 
-async def display_generated_gif(self, args): 
+async def display_generated_gif(self, args, event): 
     file_name = args.get("image")
     show_time = int(args.get("duration", 5))
+    display_severity = event.get("severity")
+    display_system = event.get("systems")
 
     if show_time == 0:
         self.flag_infinity = True
@@ -26,8 +29,11 @@ async def display_generated_gif(self, args):
 
 ##########
 
+    gif_path = generate_gif(display_severity, display_system)
 
-    gif = Image.open("visual_aid/generated/" + file_name)
+    gif = Image.open(gif_path)
+
+    #gif = Image.open("visual_aid/generated/" + file_name)
 
     try:
         num_frames = gif.n_frames

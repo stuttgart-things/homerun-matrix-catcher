@@ -6,7 +6,7 @@ matrixConfig:
       - github
     severity:
       - ERROR
-    image: github_error.gif
+    image: GITHUB_ERROR.gif
     duration: 5
   gitlab_error:
     kind: gif
@@ -14,7 +14,7 @@ matrixConfig:
       - gitlab
     severity:
       - ERROR
-    image: gitlab_error.gif
+    image: GITLAB_ERROR.gif
     duration: 5
   ansible_success:
     kind: gif
@@ -22,7 +22,7 @@ matrixConfig:
       - ansible
     severity:
       - SUCCESS
-    image: ansible_success.gif
+    image: ANSIBLE_SUCCESS.gif
     duration: 5
   scale_text:
     kind: static
