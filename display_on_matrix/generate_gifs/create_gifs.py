@@ -30,6 +30,10 @@ def generate_gif(display_severity, display_system):
         background_color = (0, 255, 0)
         font_color = "black"
         display_severity = "SUCCESS"
+    if "INFO" in display_severity:
+        background_color = (255, 0, 127)
+        font_color = "black"
+        display_severity = "INFO"
 
     if "github" in display_system:
         display_system = "GITHUB"
