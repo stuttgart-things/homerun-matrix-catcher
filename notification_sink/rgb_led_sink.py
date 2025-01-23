@@ -59,7 +59,7 @@ class RGBSink():
         await build_event_list(self.queue, self.rules, self.pending_events)
 
     async def run_event_list(self, gen_gifs, maxtime):
-        await run_event_list(self.pending_events, self.display_task, gen_gifs, maxtime)
+        await run_event_list(self, self.pending_events, self.display_task, gen_gifs, maxtime)
 
     async def display_task(self, event, gen_gifs):
         await display_task(self, event, gen_gifs)
