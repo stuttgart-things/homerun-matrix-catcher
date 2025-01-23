@@ -41,7 +41,7 @@ async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
             print("No events found, sleeping")
             args = {}
             args['image'] = "sthings.png"
-            args['duration'] = "0"
+            args['duration'] = "3"
             event = {
                 "mode": "image",
                 "severity": "INFO",
