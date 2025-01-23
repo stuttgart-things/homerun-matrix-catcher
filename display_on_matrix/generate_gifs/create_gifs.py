@@ -17,6 +17,7 @@ def create_frame(background_color, text, text_color, font_path, size):
 # Function to generate GIF
 def generate_gif(display_severity, display_system):
     font_path = "/home/sthings/homerun-matrix-catcher/fonts/Xirod.otf"
+    png_path = None
     size = (400, 300)
     frames = []
     background_color = (0, 0, 0)
@@ -38,9 +39,11 @@ def generate_gif(display_severity, display_system):
     if "github" in display_system:
         display_system = "GITHUB"
         system_background_color = (0, 0, 255)
+        png_path = "/home/sthings/homerun-matrix-catcher/visual_aid/github.png"
     if "gitlab" in display_system:
         display_system = "GITLAB"
         system_background_color = (255, 165, 0)
+        png_path = "/home/sthings/homerun-matrix-catcher/visual_aid/gitlab.png"
     if "ansible" in display_system:
         display_system = "ANSIBLE"
         system_background_color = (255, 255, 0)
@@ -50,16 +53,30 @@ def generate_gif(display_severity, display_system):
 
     gif_name = display_system + "_" + display_severity + ".gif"
 
-    texts_and_colors = [
-        (display_severity, background_color, font_color),
-        ("", (0, 0, 0), ""),
-        (display_system, system_background_color, font_color)
-    ]
+    if png_path:
+        texts_and_colors = [
+            (display_severity, background_color, font_color),
+            ("", (0, 0, 0), ""),
+#            (display_system, system_background_color, font_color)
+        ]
+    else:
+        texts_and_colors = [
+            (display_severity, background_color, font_color),
+            ("", (0, 0, 0), ""),
+            (display_system, system_background_color, font_color)
+        ]
 
     for text, bg_color, txt_color in texts_and_colors:
         frame = create_frame(bg_color, text, txt_color, font_path, size)
         frames.append(frame)
-
+###
+    if png_path:
+        frame = Image.open(png_path)
+        frames.append(frame)
+#    else:
+#        frame = create_frame(system_background_color, display_system, font_color, font_path, size)
+#        frames.append(frame)
+###
     base_path = "/home/sthings/homerun-matrix-catcher/visual_aid/generated/"
     gif_path = base_path + gif_name
     frames[0].save(
