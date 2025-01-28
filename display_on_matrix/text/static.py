@@ -26,7 +26,7 @@ async def static_text(self, args, ticker = True): #, loops=5, font_sytle="./sple
         # centers the text with offset of 4
         pos_y = int((offscreen_canvas.height - font.baseline) / 2 + font.baseline - 4)
         # pos_y = int(font.baseline + (offscreen_canvas.height/2 - font.baseline/2))
-    
+
     textcolor = graphics.Color(int(color[0]),int(color[1]),int(color[2]))
 
     # Manually calculate the width of the text
@@ -39,5 +39,5 @@ async def static_text(self, args, ticker = True): #, loops=5, font_sytle="./sple
     graphics.DrawText(offscreen_canvas, font, pos_x, pos_y, textcolor, text)
     offscreen_canvas = await loop.run_in_executor(None, self.matrix.SwapOnVSync, offscreen_canvas)
 
-    await asyncio.sleep(10)
+    await asyncio.sleep(3)
     return

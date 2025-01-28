@@ -25,20 +25,20 @@ def generate_gif(display_severity, display_system):
     font_color = "white"
 
     if "ERROR" in display_severity:
-        background_color = (255, 0, 0)
+        background_color = (255, 0, 0)#
         display_severity = "ERROR"
     if "SUCCESS" in display_severity:
         background_color = (0, 255, 0)
         font_color = "black"
         display_severity = "SUCCESS"
     if "INFO" in display_severity:
-        background_color = (255, 0, 127)
+        background_color = (0, 0, 255)
         font_color = "black"
         display_severity = "INFO"
 
     if "github" in display_system:
         display_system = "GITHUB"
-        system_background_color = (0, 0, 255)
+        system_background_color = (255, 0, 127)
         png_path = "/home/sthings/homerun-matrix-catcher/visual_aid/github.png"
     if "gitlab" in display_system:
         display_system = "GITLAB"
