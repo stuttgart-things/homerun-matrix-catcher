@@ -43,7 +43,7 @@ async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
             print("No events found, sleeping")
             args = {}
             args['image'] = "sthings.png"
-            args['duration'] = "5"
+            args['duration'] = "2"
             event = {
                 "mode": "image",
                 "severity": "INFO",
@@ -52,4 +52,4 @@ async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
                 "args": args # This will be overridden in the 'display_task' function
                 }
             await asyncio.create_task(self.display_image(args))
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.05)
