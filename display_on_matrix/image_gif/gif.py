@@ -9,7 +9,7 @@ async def display_gif(self, args):
     show_time = int(args.get("duration", 5))
     if show_time == 0:
         self.flag_infinity = True
-    speed = get_speed(args.get("speed","2"))
+    speed = get_speed(args.get("speed","5"))
     size = args.get("size", "full")
     if size != "full":
         size = size.split("x")

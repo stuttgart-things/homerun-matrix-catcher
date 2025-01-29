@@ -14,7 +14,7 @@ async def display_generated_gif(self, args, event):
     if show_time == 0:
         self.flag_infinity = True
 
-    speed = get_speed(args.get("speed", "2"))
+    speed = get_speed(args.get("speed", "5"))
     size = args.get("size", "full")
 
     if size != "full":
