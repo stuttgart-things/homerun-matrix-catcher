@@ -1,5 +1,6 @@
 
 import asyncio
+import sys
 import datetime
 from helper_functions.compare_time import evaluate_event_timing
 from helper_functions.arguments import get_arguments
@@ -21,8 +22,6 @@ async def build_event_list(queue, rules, pending_events):
         print(pending_events)
         print("\n\n")
 
-
-
 async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
     while True:
         print(f"evaluating pending events, {len(pending_events)} left")
@@ -43,13 +42,13 @@ async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
             print("No events found, sleeping")
             args = {}
             args['image'] = "sthings.png"
-            args['duration'] = "2"
+            args['duration'] = "1"
             event = {
                 "mode": "image",
                 "severity": "INFO",
                 "systems": "default",
                 "timestamp": datetime.datetime.now().timestamp(),
-                "args": args # This will be overridden in the 'display_task' function
+                "args": args
                 }
             await asyncio.create_task(self.display_image(args))
             await asyncio.sleep(0.05)

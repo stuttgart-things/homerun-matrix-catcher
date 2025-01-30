@@ -22,18 +22,19 @@ def generate_gif(display_severity, display_system):
     frames = []
     background_color = (0, 0, 0)
     system_background_color = (0, 0, 0)
-    font_color = "white"
+    font_color_severity = "white"
+    font_color_system = "white"
 
     if "ERROR" in display_severity:
         background_color = (255, 0, 0)#
         display_severity = "ERROR"
     if "SUCCESS" in display_severity:
         background_color = (0, 255, 0)
-        font_color = "black"
+        font_color_severity = "black"
         display_severity = "SUCCESS"
     if "INFO" in display_severity:
         background_color = (0, 0, 255)
-        font_color = "white"
+        font_color_severity = "white"
         display_severity = "INFO"
 
     if "github" in display_system:
@@ -47,6 +48,7 @@ def generate_gif(display_severity, display_system):
     if "ansible" in display_system:
         display_system = "ANSIBLE"
         system_background_color = (255, 255, 0)
+        font_color_system = "black"
     if "scale" in display_system:
         display_system = "SCALE"
         system_background_color = (255, 192, 203)
@@ -55,15 +57,15 @@ def generate_gif(display_severity, display_system):
 
     if png_path:
         texts_and_colors = [
-            (display_severity, background_color, font_color),
+            (display_severity, background_color, font_color_severity),
             ("", (0, 0, 0), ""),
 #            (display_system, system_background_color, font_color)
         ]
     else:
         texts_and_colors = [
-            (display_severity, background_color, font_color),
+            (display_severity, background_color, font_color_severity),
             ("", (0, 0, 0), ""),
-            (display_system, system_background_color, font_color)
+            (display_system, system_background_color, font_color_system)
         ]
 
     for text, bg_color, txt_color in texts_and_colors:
