@@ -1,6 +1,6 @@
 import datetime
 from typing import Dict
-from rgbmatrix import RGBMatrix, RGBMatrixOptions,graphics
+from rgbmatrix import RGBMatrix, RGBMatrixOptions, MockRGBMatrix, graphics
 import time
 from concurrent.futures import ThreadPoolExecutor
 from jinja2 import Template
@@ -25,7 +25,7 @@ from helper_functions.event_list import build_event_list, run_event_list
 from helper_functions.rules import get_rules
 
 class RGBSink():
-    def __init__(self, gen_gifs=False):
+    def __init__(self, gen_gifs=False, mock=False):
         options = RGBMatrixOptions()
 
         options.rows = 64
@@ -34,7 +34,10 @@ class RGBSink():
         options.parallel = 1
         options.hardware_mapping = "adafruit-hat"
 
-        self.matrix = RGBMatrix(options = options)
+        if mock:
+            self.matrix = MockRGBMatrix(options = options)
+        else:
+            self.matrix = RGBMatrix(options = options)
         self.queue = asyncio.Queue()
 
         self.stop_event = asyncio.Event()
@@ -61,8 +64,8 @@ class RGBSink():
     async def run_event_list(self, gen_gifs, maxtime):
         await run_event_list(self, self.pending_events, self.display_task, gen_gifs, maxtime)
 
-    async def display_task(self, event, gen_gifs):
-        await display_task(self, event, gen_gifs)
+    async def display_task(self, event, gen_gifs, mock):
+        await display_task(self, event, gen_gifs, mock)
 
     async def run(self, gen_gifs, maxtime):
         try:

@@ -2,26 +2,26 @@ import asyncio
 
 import asyncio
 
-async def display_task(self, event, gen_gifs):
+async def display_task(self, event, gen_gifs, mock):
     print("Running event: " + str(event))
 
     if event["mode"].strip().lower()=="static":
-        self.animation_task = asyncio.create_task(self.static_text(event.get("args",{}),ticker=False))
+        self.animation_task = asyncio.create_task(self.static_text(event.get("args",{}),ticker=False), mock)
 
     elif event["mode"].strip().lower()=="text":
         self.animation_task = asyncio.create_task(self.flow_text(event.get("args",{}),ticker=False))
 
     elif event["mode"].strip().lower()=="ticker":
-        self.animation_task = asyncio.create_task(self.flow_text(event.get("args",{}),ticker=True))
+        self.animation_task = asyncio.create_task(self.flow_text(event.get("args",{}),ticker=True), mock)
 
     elif event["mode"].strip().lower()=="image":
-        self.animation_task = asyncio.create_task(self.display_image(event.get("args",{})))
+        self.animation_task = asyncio.create_task(self.display_image(event.get("args",{})), mock)
 
     elif event["mode"].strip().lower()=="gif":
         if gen_gifs:
-            self.animation_task = asyncio.create_task(self.display_generated_gif(event.get("args",{}), event))
+            self.animation_task = asyncio.create_task(self.display_generated_gif(event.get("args",{}), event), mock)
         else:
-            self.animation_task = asyncio.create_task(self.display_gif(event.get("args",{})))
+            self.animation_task = asyncio.create_task(self.display_gif(event.get("args",{})), mock)
 
 
     if self.animation_task != None:

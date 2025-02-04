@@ -2,6 +2,7 @@ import redis
 from event_source import RedisStreamsSource
 import asyncio
 from notification_sink import RGBSink
+from notification_sink import MockRGBMatrix
 import argparse
 import signal
 import os
@@ -10,7 +11,7 @@ import os
 async def example_consumer(event: dict):
     print(f"Received event from  {event}")
 
-async def main(rules, gen_gifs, maxtime):
+async def main(rules, gen_gifs, maxtime, mock):
     # Create a Redis client
     #redis_client = redis.from_url("redis://localhost", decode_responses=True)
 
@@ -27,7 +28,7 @@ async def main(rules, gen_gifs, maxtime):
     
     await asyncio.gather(
         stream_source.start(),
-        rgb_sink.start(rules, gen_gifs, maxtime)
+        rgb_sink.start(rules, gen_gifs, maxtime, mock)
     )
 
     # Wait indefinitely until a SIGTERM signal is received
@@ -52,6 +53,7 @@ if __name__ == "__main__":
     parser.add_argument("--profile", required=True, help="Yaml Rule file")
     parser.add_argument("--generategifs", action="store_true", help="Display generated gifs function")
     parser.add_argument("--maxtime", type=int, default=5, required=False, help="Maximum time in seconds")
+    parser.add_argument("--mock", action="store_true", help="Mock the Matrix display output")
     #parser.add_argument("--events", required=True, help="File with json events")
     #parser.add_argument("--host", required=True, help="Redis host")
     #parser.add_argument("--port", required=True, help="Redis port")
@@ -61,6 +63,7 @@ if __name__ == "__main__":
     profile_yaml = args.profile
     gen_gifs = args.generategifs
     maxtime = args.maxtime
+    mock = args.mock
     #events = args.events
     # Run the main function
-    asyncio.run(main(profile_yaml, gen_gifs, maxtime))
+    asyncio.run(main(profile_yaml, gen_gifs, maxtime, mock))
