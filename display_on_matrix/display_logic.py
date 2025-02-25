@@ -19,7 +19,10 @@ async def display_task(self, event, gen_gifs):
 
     elif event["mode"].strip().lower()=="gif":
         if gen_gifs:
-            self.animation_task = asyncio.create_task(self.display_generated_gif(event.get("args",{}), event))
+            if "chaos" in event["system"].strip().lower():
+                self.animation_task = asyncio.create_task(self.display_gif(event.get("args",{})))
+            else:
+                self.animation_task = asyncio.create_task(self.display_generated_gif(event.get("args",{}), event))
         else:
             self.animation_task = asyncio.create_task(self.display_gif(event.get("args",{})))
 
