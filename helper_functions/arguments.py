@@ -1,5 +1,5 @@
 from jinja2 import Template
-from cachetools import Cache
+#from cachetools import Cache
 
 def get_arguments(rules, event):
     event_args = []
