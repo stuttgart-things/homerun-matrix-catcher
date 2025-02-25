@@ -77,10 +77,19 @@ matrixConfig:
     systems:
       - scale
     severity:
-      - WARNING
       - INFO
     text: |
       {{ message | replace('WEIGHT: ','') }}g
     speed: 5
     font: myfont.bdf
-
+  chaos:
+    kind: gif
+    systems:
+      - sthings-tetris
+    severity:
+      - CHAOS1
+      - CHAOS2
+      - CHAOS3
+      - CHAOS4
+    image: explosion.gif
+    duration: 5
