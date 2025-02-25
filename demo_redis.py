@@ -61,6 +61,7 @@ if __name__ == "__main__":
     profile_yaml = args.profile
     gen_gifs = args.generategifs
     maxtime = args.maxtime
+    CHECK_WEIGHT = "empty"
     #events = args.events
     # Run the main function
     asyncio.run(main(profile_yaml, gen_gifs, maxtime))

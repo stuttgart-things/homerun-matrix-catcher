@@ -16,7 +16,6 @@ async def build_event_list(queue, rules, pending_events):
         print(event_args)
         print("*******************************************************************************************")
         if event_args:
-            print("INSIDE HERE")
             pending_events += event_args
         print("\npending events")
         print(pending_events)
@@ -29,10 +28,10 @@ async def run_event_list(self, pending_events, display_task, gen_gifs, maxtime):
             print("Popping event")
             event_args = pending_events.pop(0)
             print(f"Popped event: {event_args}")
-            time_difference, log, event_expired = evaluate_event_timing(event_args, maxtime)
+            time_difference, log, not_expired = evaluate_event_timing(event_args, maxtime)
             print(log)
             print(f"The time difference is: {time_difference}")
-            if event_expired:
+            if not_expired:
                 print(f"Running event: {event_args}")
                 await display_task(event_args, gen_gifs)
             else:
