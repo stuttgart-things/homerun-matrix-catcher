@@ -1,5 +1,5 @@
 from jinja2 import Template
-
+from cachetools import Cache
 
 def get_arguments(rules, event):
     event_args = []
@@ -7,6 +7,7 @@ def get_arguments(rules, event):
     print("/////////////////////////////////////")
     print(event)
     print("/////////////////////////////////////")
+    cache = Cache(maxsize=10)
     for rule_name, rule in rules.items():
         if event_args:
             break
@@ -29,6 +30,12 @@ def get_arguments(rules, event):
             if kind in ["static", "text", "ticker"]:
                 print_text = rule.get('text')
                 print_text = Template(print_text).render(**event)
+                if event_system == "scale":
+                    bool_calories = calories(cache, print_text)
+                    if bool_calories:
+                        args["calories"] = cache["amount_calories"]
+                    else:
+                        args["more_sweets"] = cache["more_sweets"]
                 args["text"] = print_text
                 args['font'] = rule.get('font')
             # Add other arguments from the rule
@@ -46,3 +53,20 @@ def get_color(color):
     color = color.replace("(","").replace(")","").replace(" ","")
     color = color.split(",")
     return color 
+
+def calories(cache, print_text):
+    global CHECK_WEIGHT
+    kcal_1g = 4
+    if CHECK_WEIGHT is not "empty":
+        weight_sum = int(CHECK_WEIGHT) - int(print_text)
+        if weight_sum > 0:
+            weight_calories = int(weight_sum) * kcal_1g
+            cache["amount_calories"] = weight_calories
+            bool_calories = True
+        else:
+            more_sweets = abs(weight_sum)
+            cache["more_sweets"] = more_sweets
+            bool_calories = False
+    CHECK_WEIGHT = print_text
+    return bool_calories
+    
