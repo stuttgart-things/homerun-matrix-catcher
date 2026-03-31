@@ -61,7 +61,7 @@ pyinotify==0.9.6
 PyJWT==1.7.1
 pylint==2.7.2
 PyOpenGL==3.1.5
-pyOpenSSL==20.0.1
+pyOpenSSL==26.0.0
 pyserial==3.5b0
 PyYAML==6.0.1
 rainbowhat==0.1.0
