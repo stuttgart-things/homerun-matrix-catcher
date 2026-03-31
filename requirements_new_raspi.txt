@@ -40,7 +40,7 @@ mccabe==0.6.1
 microdotphat==0.2.1
 mote==0.0.4
 motephat==0.0.3
-numpy==1.19.5
+numpy==1.22.0
 oauthlib==3.1.0
 packaging==24.1
 pantilthat==0.0.7
