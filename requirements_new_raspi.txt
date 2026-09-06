@@ -15,7 +15,7 @@ colorama==0.4.4
 colorful==0.5.6
 colorzero==1.1
 cryptography==3.3.2
-Cython==0.29.21
+Cython==0.29.37
 Deprecated==1.2.14
 distlib==0.3.8
 distro==1.5.0
