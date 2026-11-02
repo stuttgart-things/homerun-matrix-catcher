@@ -59,7 +59,7 @@ psutil==5.8.0
 Pygments==2.7.1
 pyinotify==0.9.6
 PyJWT==1.7.1
-pylint==2.7.2
+pylint==4.0.9
 PyOpenGL==3.1.5
 pyOpenSSL==20.0.1
 pyserial==3.5b0
